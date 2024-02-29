@@ -1,6 +1,11 @@
 # This version is after the final activity in week 7
-from dash import Dash, html
+from dash import Dash, html, dcc,Output, Input
 import dash_bootstrap_components as dbc
+from layout_elements import row_one,row_four,row_five,row_six,row_two
+from figures import pie_chart,bar_chart
+import pandas as pd
+import plotly.graph_objs as go
+from pathlib import Path
 
 # Variable that contains the external_stylesheet to use, in this case Bootstrap styling from dash bootstrap
 # components (dbc)
@@ -11,104 +16,76 @@ meta_tags = [
     {"name": "viewport", "content": "width=device-width, initial-scale=1"},
 ]
 
+
 # Pass the stylesheet variable to the Dash app constructor
 app = Dash(__name__, external_stylesheets=external_stylesheets, meta_tags=meta_tags)
 
 # Variables that define the three rows of the layout
-row_one = html.Div(
-    dbc.Row([
-        dbc.Col([html.H1("Paralympics Dashboard"), html.P(
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent congue luctus elit nec gravida. Fusce "
-            "efficitur posuere metus posuere malesuada. ")
-                 ], width=12),
-    ]),
-)
-row_four = html.Div(
-    dbc.Row([
-        dbc.Col(children=[
-            dbc.Input(id='search-input', type='text', placeholder='Enter search term'),
-            html.Div(id='search-output')
-        ], width=3),
-    ])
-)
-row_two = html.Div(
-    dbc.Row([
-        dbc.Col(children=[dbc.Select(id="type-dropdown",
-                                     # id uniquely identifies the element, will be needed later
-                                     options=[
-                                         {"label": "Events", "value": "events"},
-                                         # The value is in the format of the column heading in the data
-                                         {"label": "Sports", "value": "sports"},
-                                         {"label": "Countries", "value": "countries"},
-                                         {"label": "Athletes", "value": "participants"},
-                                     ],
-                                     value="events"  # The default selection
-                                     ),
-                          ], width=2),
-        dbc.Col(children=[
-            html.Img(src=app.get_asset_url('line-chart-placeholder.png'), className="img-fluid"),
-        ], width=4),
-        dbc.Col(children=[
-            dbc.Checklist(
-                options=[
-                    {"label": "Summer", "value": "summer"},
-                    {"label": "Winter", "value": "winter"},
-                ],
-                value=["summer"],  # Values is a list as you can select both winter and summer
-                id="checklist-input",
-            ),
-        ], width=2),
-        dbc.Col(children=[
-            html.Img(src=app.get_asset_url('bar-chart-placeholder.png'), className="img-fluid"),
-        ], width=4),
-    ], align="start")
-)
-
-row_three = html.Div(
-    dbc.Row([
-        dbc.Col(children=[
-            html.Img(src=app.get_asset_url('map-placeholder.png'), className="img-fluid"),
-        ], width=8),
-        dbc.Col(children=[
-            dbc.Card(
-                [
-                    dbc.CardImg(src=app.get_asset_url('logos/2022_Beijing.jpg'), top=True, style={"width": "200px"}),
-                    dbc.CardBody(
-                        [
-                            html.H4("TownName 2026", className="card-title"),
-                            html.P(
-                                "Highlights of the paralympic event will go here. This will be a sentence or two.",
-                                className="card-text",
-                            ),
-                            html.P(
-                                "Number of athletes: XX",
-                                className="card-text",
-                            ),
-                            html.P(
-                                "Number of events: XX",
-                                className="card-text",
-                            ),
-                            html.P(
-                                "Number of countries: XX",
-                                className="card-text",
-                            ),
-                        ]
-                    ),
-                ],
-                style={"width": "18rem"},
-            )
-
-        ], width=4),
-    ], align="start")
-)
 
 # Add an HTML layout to the Dash app.
 # The layout is wrapped in a DBC Container()
 app.layout = dbc.Container([
-    row_one,row_four,
-    row_two,
-    row_three,
+    row_one,row_four,row_five,row_two,
+    row_six
 ])
+
+data = Path(__file__).parent.parent.joinpath("data", "prepared6.csv")
+df = pd.read_csv(data)
+
+@app.callback(
+    Output(component_id = 'pie',component_property='figure'),
+    Input(component_id = 'dropdown',component_property='value')
+)
+
+def update_pie_chart(provider):
+    #df = pd.read_csv('your_data.csv')
+    figure = pie_chart(provider)
+    return figure
+
+@app.callback(
+    Output(component_id = 'bar',component_property='figure'),
+    Input(component_id = 'bar-slider',component_property='value'),
+    Input(component_id = 'search-input',component_property='value')
+    
+)
+
+def update_bar_chart(selected_value,search_term):
+    #df = pd.read_csv('your_data.csv')
+    #filtered_df = df[df['HE provider'].str.contains(search_term, case=False)] if search_term else df
+    """figure = bar_chart(num_bars)
+    filtered_df = df[df['HE provider'].str.contains(search_term, case=False)] if search_term else df
+    if not filtered_df.empty:
+        for col in filtered_df.columns[1:3]:  # Skip the 'HE provider' column
+            figure.add_trace(go.Bar(
+                x=filtered_df['HE provider'],
+                y=filtered_df[col],
+                name=col
+            ))
+    figure.update_layout(barmode='group', title=f'Bar Chart for {search_term}')
+    return figure"""
+    # Filter data based on search term (if provided)
+    if not search_term:
+        return bar_chart(selected_value)  # Include all data if no search term
+    else:
+        filtered_df = df[df['HE provider'].str.contains(search_term, case=False)]
+        # Disable slider when searching (optional)
+        selected_value = 'disabled'
+
+    # Create an empty figure (clear existing traces)
+    fig = go.Figure()
+
+    # Check if any data remains after filtering
+    if len(filtered_df) > 0:
+        # Add trace for the filtered data (only if results exist)
+        fig.add_trace(go.Bar(x=filtered_df['HE provider'], y=filtered_df['cycle_spaces']))
+        fig.add_trace(go.Bar(x=filtered_df['HE provider'], y=filtered_df['car_spaces']))
+
+    # Update layout (optional)
+    fig.update_layout(title='Bar Chart - HE Provider Search')
+
+    return fig, selected_value  # Return both figure and slider value
+
+
 
 # Run the Dash app
 if __name__ == '__main__':
