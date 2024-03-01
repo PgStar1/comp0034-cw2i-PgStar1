@@ -1,15 +1,15 @@
 # This version is after the final activity in week 7
 from dash import Dash, html, dcc,Output, Input
 import dash_bootstrap_components as dbc
-from layout_elements import row_one,row_four,row_five,row_six,row_two
-from figures import pie_chart,bar_chart
+from layout_elements import row_one,row_four,row_five,row_six,row_two,row_three
+from figures import pie_chart,bar_chart,table_stats
 import pandas as pd
 import plotly.graph_objs as go
 from pathlib import Path
 
 # Variable that contains the external_stylesheet to use, in this case Bootstrap styling from dash bootstrap
 # components (dbc)
-external_stylesheets = [dbc.themes.BOOTSTRAP]
+external_stylesheets = [dbc.themes.VAPOR]
 
 # Define a variable that contains the meta tags
 meta_tags = [
@@ -25,33 +25,76 @@ app = Dash(__name__, external_stylesheets=external_stylesheets, meta_tags=meta_t
 # Add an HTML layout to the Dash app.
 # The layout is wrapped in a DBC Container()
 app.layout = dbc.Container([
-    row_one,row_four,row_five,row_two,
+    row_one,row_four,row_five,row_two,row_three,
     row_six
 ])
 
-data = Path(__file__).parent.parent.joinpath("data", "prepared6.csv")
-df = pd.read_csv(data)
+
+data = Path(__file__).parent.parent.joinpath("data", "prepared.csv")
+dataset_2016 = pd.read_csv(data)
+data1 = Path(__file__).parent.parent.joinpath("data", "prepared1.csv")
+dataset_2017 = pd.read_csv(data1)
+data2 = Path(__file__).parent.parent.joinpath("data", "prepared2.csv")
+dataset_2018 = pd.read_csv(data2)
+data3 = Path(__file__).parent.parent.joinpath("data", "prepared3.csv")
+dataset_2019 = pd.read_csv(data3)
+data4 = Path(__file__).parent.parent.joinpath("data", "prepared4.csv")
+dataset_2020 = pd.read_csv(data4)
+data5 = Path(__file__).parent.parent.joinpath("data", "prepared5.csv")
+dataset_2021 = pd.read_csv(data5)
+data6 = Path(__file__).parent.parent.joinpath("data", "prepared6.csv")
+dataset_2022 = pd.read_csv(data6)
+
+year_datasets = {
+    '2015/16': dataset_2016,
+    '2016/17': dataset_2017,
+    '2017/18': dataset_2018,
+    '2018/19': dataset_2019,
+    '2019/20': dataset_2020,
+    '2020/21': dataset_2021,
+    '2021/22': dataset_2022
+}
+
+@app.callback(
+    Output('dropdown', 'options'),
+    [Input('checklist', 'value')]
+)
+def update_provider_dropdown(selected_years):
+    providers = set()
+    #for year in selected_years:
+    providers.update(year_datasets[selected_years]['HE provider'].unique())
+    options = [{'label': provider, 'value': provider} for provider in sorted(providers)]#sorted(providers)]
+    return options
+
 
 @app.callback(
     Output(component_id = 'pie',component_property='figure'),
-    Input(component_id = 'dropdown',component_property='value')
+    [Input(component_id = 'dropdown',component_property='value'),
+    Input(component_id = 'checklist',component_property = 'value')]
 )
 
-def update_pie_chart(provider):
+def update_pie_chart(provider,num):
+    #years = ['2016','2017','2018','2019','2020','2021']
+    #if num in years:
     #df = pd.read_csv('your_data.csv')
-    figure = pie_chart(provider)
+    
+    figure = pie_chart(provider,num)
     return figure
 
 @app.callback(
     Output(component_id = 'bar',component_property='figure'),
-    Input(component_id = 'bar-slider',component_property='value'),
-    Input(component_id = 'search-input',component_property='value')
+    [Input(component_id = 'bar-slider',component_property='value'),
+    Input(component_id = 'search-input',component_property='value'),
+    Input(component_id = 'checklist',component_property = 'value')]
     
 )
 
-def update_bar_chart(selected_value,search_term):
+def update_bar_chart(selected_value,search_term,selected_year):
     #df = pd.read_csv('your_data.csv')
     #filtered_df = df[df['HE provider'].str.contains(search_term, case=False)] if search_term else df
+    figure = bar_chart(selected_value,selected_year)
+    return figure
+    
     """figure = bar_chart(num_bars)
     filtered_df = df[df['HE provider'].str.contains(search_term, case=False)] if search_term else df
     if not filtered_df.empty:
@@ -62,8 +105,11 @@ def update_bar_chart(selected_value,search_term):
                 name=col
             ))
     figure.update_layout(barmode='group', title=f'Bar Chart for {search_term}')
-    return figure"""
+    return figure
     # Filter data based on search term (if provided)
+    
+    df = year_datasets[selected_year]
+    
     if not search_term:
         return bar_chart(selected_value)  # Include all data if no search term
     else:
@@ -83,9 +129,19 @@ def update_bar_chart(selected_value,search_term):
     # Update layout (optional)
     fig.update_layout(title='Bar Chart - HE Provider Search')
 
-    return fig, selected_value  # Return both figure and slider value
+    return fig, selected_value  # Return both figure and slider value"""
 
+@app.callback(
+    Output(component_id = 'table',component_property='figure'),
+    [Input(component_id = 'checklist',component_property = 'value')]
+    
+)
 
+def update_table(selected_value,selected_year):
+    #df = pd.read_csv('your_data.csv')
+    #filtered_df = df[df['HE provider'].str.contains(search_term, case=False)] if search_term else df
+    figure = table_stats(selected_value,selected_year)
+    return figure
 
 # Run the Dash app
 if __name__ == '__main__':
