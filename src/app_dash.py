@@ -1,8 +1,8 @@
 # This version is after the final activity in week 7
 from dash import Dash, html, dcc,Output, Input
 import dash_bootstrap_components as dbc
-from layout_elements import row_one,row_four,row_five,row_six,row_two,row_three
-from figures import pie_chart,bar_chart,table_stats
+from layout_elements import row_one,row_four,row_five,row_six,row_two,row_three,row_seven
+from figures import pie_chart,bar_chart,table_stats,line_chart
 import pandas as pd
 import plotly.graph_objs as go
 from pathlib import Path
@@ -26,7 +26,7 @@ app = Dash(__name__, external_stylesheets=external_stylesheets, meta_tags=meta_t
 # The layout is wrapped in a DBC Container()
 app.layout = dbc.Container([
     row_one,row_four,row_five,row_two,row_three,
-    row_six
+    row_six,row_seven
 ])
 
 
@@ -62,6 +62,8 @@ year_datasets = {
 def update_provider_dropdown(selected_years):
     providers = set()
     #for year in selected_years:
+    if isinstance(selected_years, list):
+        selected_years = selected_years[0]
     providers.update(year_datasets[selected_years]['HE provider'].unique())
     options = [{'label': provider, 'value': provider} for provider in sorted(providers)]#sorted(providers)]
     return options
@@ -141,6 +143,14 @@ def update_table(selected_value,selected_year):
     #df = pd.read_csv('your_data.csv')
     #filtered_df = df[df['HE provider'].str.contains(search_term, case=False)] if search_term else df
     figure = table_stats(selected_value,selected_year)
+    return figure
+
+@app.callback(
+    Output(component_id='line', component_property='figure'),
+    [Input(component_id='provider-dropdown', component_property='value')]
+)
+def update_line_chart(selected_provider):
+    figure = line_chart(selected_provider)
     return figure
 
 # Run the Dash app
