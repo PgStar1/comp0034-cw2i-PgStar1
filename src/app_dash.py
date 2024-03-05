@@ -1,8 +1,8 @@
 # This version is after the final activity in week 7
 from dash import Dash, html, dcc,Output, Input
 import dash_bootstrap_components as dbc
-from layout_elements import row_one,row_four,row_five,row_six,row_two,row_three,row_seven
-from figures import pie_chart,bar_chart,table_stats,line_chart
+from layout_elements import row_one,row_four,row_five,row_six,row_two,row_three,row_seven,row_eight
+from figures import pie_chart,bar_chart,table_stats,line_chart,heatmap
 import pandas as pd
 import plotly.graph_objs as go
 from pathlib import Path
@@ -26,7 +26,7 @@ app = Dash(__name__, external_stylesheets=external_stylesheets, meta_tags=meta_t
 # The layout is wrapped in a DBC Container()
 app.layout = dbc.Container([
     row_one,row_four,row_five,row_two,row_three,
-    row_six,row_seven
+    row_six,row_seven,row_eight
 ])
 
 
@@ -151,6 +151,14 @@ def update_table(selected_value,selected_year):
 )
 def update_line_chart(selected_provider):
     figure = line_chart(selected_provider)
+    return figure
+
+@app.callback(
+    Output(component_id='heat', component_property='figure'),
+    [Input(component_id='provider-dropdown', component_property='value')]
+)
+def update_line_chart(selected_provider):
+    figure = heatmap(selected_provider)
     return figure
 
 # Run the Dash app

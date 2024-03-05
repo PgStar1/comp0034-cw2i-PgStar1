@@ -1,6 +1,6 @@
 from dash import Dash, html, dcc
 import dash_bootstrap_components as dbc
-from figures import bar_chart,pie_chart,line_chart
+from figures import bar_chart,pie_chart,line_chart,heatmap
 from pathlib import Path
 import pandas as pd
 from dash import dash_table
@@ -37,7 +37,7 @@ first_value = dataset_2022.iloc[0]['HE provider']
 bar = bar_chart(len(dataset_2022),'2015/16')
 pie = pie_chart(first_value,'2015/16')
 line = line_chart(['University College London'])
-
+heatmap = heatmap(['University College London'])
 column_values = dataset_2022['HE provider'].unique()
 
 dropdown_options = [{'label': value, 'value': value} for value in column_values]
@@ -160,6 +160,11 @@ row_seven = html.Div(
              dbc.Col(children=[dropdown2
             #html.Img(src=app.get_asset_url('line-chart-placeholder.png'), className="img-fluid"),
         ], width=4)])) 
+
+row_eight = html.Div(
+    dbc.Row([dbc.Col(children=[dcc.Graph(id='heat', figure = heatmap)
+            #html.Img(src=app.get_asset_url('line-chart-placeholder.png'), className="img-fluid"),
+        ], width=12)])) 
 
 """row_six = html.Div([
     dcc.Dropdown(
