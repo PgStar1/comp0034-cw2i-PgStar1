@@ -33,11 +33,11 @@ year_datasets = {
     '2020/21': dataset_2021,
     '2021/22': dataset_2022
 }
-first_value = dataset_2022.iloc[0]['HE provider']
+first_value = dataset_2022.iloc[8]['HE provider']
 bar = bar_chart(len(dataset_2022),'2015/16')
 pie = pie_chart(first_value,'2015/16')
 line = line_chart(['University College London'])
-heatmap = heatmap(['University College London'])
+heat = heatmap(['The University of Greenwich'])
 column_values = dataset_2022['HE provider'].unique()
 
 dropdown_options = [{'label': value, 'value': value} for value in column_values]
@@ -108,6 +108,15 @@ slider = dcc.Slider(
         #marks={i: str(i) for i in range(1, len(df) + 1)}  # Mark every integer from 1 to the number of bars
         #marks = {} # Dictionary
     )
+
+"""range_slider = dcc.RangeSlider(
+            id="he-provider-slider",
+            min=1,
+            max=len(all_data['HE provider'].unique()),
+            value=[1, 9],  # Default to show all providers
+            marks={str(i): i for i in range(min, max + 1)},
+            tooltip={"placement": "bottom"},
+        )"""
 row_one = html.Div(
     dbc.Row([
         dbc.Col([html.H1("Paralympics Dashboard"), html.P(
@@ -156,13 +165,12 @@ row_six = html.Div(
 row_seven = html.Div(
     dbc.Row([dbc.Col(children=[dcc.Graph(id='line', figure = line)
             #html.Img(src=app.get_asset_url('line-chart-placeholder.png'), className="img-fluid"),
-        ], width=8),
-             dbc.Col(children=[dropdown2
+        ], width=6),dbc.Col(children=[dcc.Graph(id='heat', figure = heat)
             #html.Img(src=app.get_asset_url('line-chart-placeholder.png'), className="img-fluid"),
-        ], width=4)])) 
+        ], width=6)])) 
 
 row_eight = html.Div(
-    dbc.Row([dbc.Col(children=[dcc.Graph(id='heat', figure = heatmap)
+    dbc.Row([dbc.Col(children=[dropdown2
             #html.Img(src=app.get_asset_url('line-chart-placeholder.png'), className="img-fluid"),
         ], width=12)])) 
 

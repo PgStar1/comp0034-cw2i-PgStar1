@@ -26,7 +26,7 @@ app = Dash(__name__, external_stylesheets=external_stylesheets, meta_tags=meta_t
 # The layout is wrapped in a DBC Container()
 app.layout = dbc.Container([
     row_one,row_four,row_five,row_two,row_three,
-    row_six,row_seven,row_eight
+    row_six,row_eight,row_seven
 ])
 
 
@@ -147,19 +147,22 @@ def update_table(selected_value,selected_year):
 
 @app.callback(
     Output(component_id='line', component_property='figure'),
-    [Input(component_id='provider-dropdown', component_property='value')]
-)
-def update_line_chart(selected_provider):
-    figure = line_chart(selected_provider)
-    return figure
-
-@app.callback(
     Output(component_id='heat', component_property='figure'),
     [Input(component_id='provider-dropdown', component_property='value')]
 )
 def update_line_chart(selected_provider):
-    figure = heatmap(selected_provider)
-    return figure
+    figure = line_chart(selected_provider)
+    figure1 = heatmap(selected_provider)#,selected_provider)
+    return figure,figure1
+
+"""@app.callback(
+    Output(component_id='heat', component_property='figure'),
+    [Input(component_id='provider-dropdown', component_property='value')]
+     #Input(component_id='provider-dropdown', component_property='value')]
+)
+def update_heat_chart(selected_provider):#,selected_provider):
+    figure = heatmap(selected_provider)#,selected_provider)
+    return figure"""
 
 # Run the Dash app
 if __name__ == '__main__':

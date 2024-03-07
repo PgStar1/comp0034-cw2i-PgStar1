@@ -145,21 +145,24 @@ def line_chart(selected_providers):
 )
     return heatmap_trace"""
 
-def heatmap(selected_provider):
+def heatmap(selected_providers):
 
-    filtered_data = all_data[all_data["HE provider"] == selected_provider]
-
-    if not filtered_data.empty:  # Check if data is empty for the selected provider
-        heatmap_trace = go.Heatmap(
+    #if not selected_providers:
+     #   return {}
+    #filtered_data = all_data[all_data["HE provider"] == selected_provider]
+    filtered_data = all_data[all_data['HE provider'].isin(selected_providers)]
+    filtered_data  = filtered_data.pivot(index='HE provider',columns='Year',values='Total renewable energy generated onsite or offsite (kWh)') 
+    # Check if data is empty for the selected provider
+    fig = px.imshow(filtered_data,color_continuous_scale=px.colors.sequential.Reds)
+    """heatmap_trace = go.Heatmap(
             x=filtered_data["Year"],
-            y=filtered_data["HE provider"],  # This value is likely not useful for a single provider
-            z=filtered_data["Total renewable energy generated onsite or offsite (kWh)"],
+            #y=filtered_data["HE provider"],  # This value is likely not useful for a single provider
+            y=filtered_data["Total renewable energy generated onsite or offsite (kWh)"],
             # colorscale='Viridis',  # Optional color scale customization
             # colorbar=dict(title='Energy Consumption')  # Optional color bar customization
-        )
-        return heatmap_trace
-    else:
-        return None  # Return None if no data is found for the selected provider
+        )"""
+    return fig
+    # Return None if no data is found for the selected provider
 
 
 
