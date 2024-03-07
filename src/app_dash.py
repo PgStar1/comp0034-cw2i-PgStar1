@@ -85,7 +85,7 @@ def update_pie_chart(provider,num):
 
 @app.callback(
     Output(component_id = 'bar',component_property='figure'),
-    [Input(component_id = 'bar-slider',component_property='value'),
+    [Input(component_id = 'he-provider-slider',component_property='value'),
     Input(component_id = 'search-input',component_property='value'),
     Input(component_id = 'checklist',component_property = 'value')]
     

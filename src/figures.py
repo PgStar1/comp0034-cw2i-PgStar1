@@ -59,13 +59,13 @@ def bar_chart(num_charts,selected_year):
 
     fig = go.Figure()
     fig.add_trace(go.Bar(
-        x=filtered_data['HE provider'][:num_charts],
-        y=filtered_data['Total number of cycle spaces'][:num_charts],
+        x=filtered_data['HE provider'][num_charts[0]:num_charts[1]],
+        y=filtered_data['Total number of cycle spaces'][num_charts[0]:num_charts[1]],
         name='cycle_spaces'
     ))
     fig.add_trace(go.Bar(
-        x=filtered_data['HE provider'][:num_charts],
-        y=filtered_data['Total number of car parking spaces'][:num_charts],
+        x=filtered_data['HE provider'][num_charts[0]:num_charts[1]],
+        y=filtered_data['Total number of car parking spaces'][num_charts[0]:num_charts[1]],
         name='car_spaces'
     ))
     fig.update_layout(title='How has the ratio of female:male participants changed?',
@@ -153,7 +153,7 @@ def heatmap(selected_providers):
     filtered_data = all_data[all_data['HE provider'].isin(selected_providers)]
     filtered_data  = filtered_data.pivot(index='HE provider',columns='Year',values='Total renewable energy generated onsite or offsite (kWh)') 
     # Check if data is empty for the selected provider
-    fig = px.imshow(filtered_data,color_continuous_scale=px.colors.sequential.Reds)
+    fig = px.imshow(filtered_data,color_continuous_scale=px.colors.sequential.OrRd)
     """heatmap_trace = go.Heatmap(
             x=filtered_data["Year"],
             #y=filtered_data["HE provider"],  # This value is likely not useful for a single provider

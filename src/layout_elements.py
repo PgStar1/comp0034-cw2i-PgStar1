@@ -34,7 +34,7 @@ year_datasets = {
     '2021/22': dataset_2022
 }
 first_value = dataset_2022.iloc[8]['HE provider']
-bar = bar_chart(len(dataset_2022),'2015/16')
+bar = bar_chart([1,9],'2015/16')
 pie = pie_chart(first_value,'2015/16')
 line = line_chart(['University College London'])
 heat = heatmap(['The University of Greenwich'])
@@ -109,14 +109,14 @@ slider = dcc.Slider(
         #marks = {} # Dictionary
     )
 
-"""range_slider = dcc.RangeSlider(
+range_slider = dcc.RangeSlider(
             id="he-provider-slider",
             min=1,
             max=len(all_data['HE provider'].unique()),
             value=[1, 9],  # Default to show all providers
-            marks={str(i): i for i in range(min, max + 1)},
+            #marks={str(i): i for i in range(min, max + 1)},
             tooltip={"placement": "bottom"},
-        )"""
+        )
 row_one = html.Div(
     dbc.Row([
         dbc.Col([html.H1("Paralympics Dashboard"), html.P(
@@ -142,7 +142,7 @@ row_five = html.Div(
              ])
     )
 row_two = html.Div(
-    dbc.Row([dbc.Col(children=[slider
+    dbc.Row([dbc.Col(children=[range_slider
             #html.Img(src=app.get_asset_url('line-chart-placeholder.png'), className="img-fluid"),
         ], width=12),
              ])
