@@ -119,11 +119,13 @@ range_slider = dcc.RangeSlider(
         )
 row_one = html.Div(
     dbc.Row([
-        dbc.Col([html.H1("Paralympics Dashboard"), html.P(
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent congue luctus elit nec gravida. Fusce "
-            "efficitur posuere metus posuere malesuada. ")
-                 ], width=12),
-    ]),
+        dbc.Col(children=[html.H1("TRANSPORT AND ENVIRONMENT METRICS AT VARIOUS HIGHER EDUCATION PROVIDERS")
+                 ], width=9,style={'background-color': '#1a202c','color': '#4fd1c5'}),
+        dbc.Col(children=[
+            html.Img(src='/assets/logo.jpg', style={'top': '10px', 'right': '10px','width': '200px', 'height': '200px'}),
+        ], width=3)
+                
+    ])
 )
 row_four = html.Div(
     dbc.Row([
@@ -144,22 +146,29 @@ row_five = html.Div(
 row_two = html.Div(
     dbc.Row([dbc.Col(children=[range_slider
             #html.Img(src=app.get_asset_url('line-chart-placeholder.png'), className="img-fluid"),
-        ], width=12),
-             ])
+        ], width=12),])
     ) 
 row_three = html.Div(
     dbc.Row([dbc.Col(children=[dropdown
             #html.Img(src=app.get_asset_url('line-chart-placeholder.png'), className="img-fluid"),
-        ], width=4)])) 
+        ], width=6),
+             dbc.Col(children=[
+                 checklist,
+    ], width =5)])) 
+
+row_nine = html.Div(
+    dbc.Row([dbc.Col(children=[],width=12)]))
+
+
+row_ten = html.Br()
+
 
 row_six = html.Div(
-    dbc.Row([dbc.Col(children=[
-        checklist,
-    ], width={"size": 4, "offset": 4}),
-             dbc.Col(children=[
-                 dcc.Graph(id='pie', figure = pie)], width=7),
+    dbc.Row([dbc.Col(children=[],width=1),dbc.Col(children=[
+        dcc.Graph(id='pie', figure = pie)], width=10
+        ),#{"size": 4, "offset": 4}),
              #dbc.Col(children=[Table], width=5)
-             ])
+        dbc.Col(children=[],width=1)])
     )
 
 row_seven = html.Div(

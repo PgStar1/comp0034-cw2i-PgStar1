@@ -1,7 +1,7 @@
 # This version is after the final activity in week 7
 from dash import Dash, html, dcc,Output, Input
 import dash_bootstrap_components as dbc
-from layout_elements import row_one,row_four,row_five,row_six,row_two,row_three,row_seven,row_eight
+from layout_elements import row_one,row_ten,row_four,row_nine,row_five,row_six,row_two,row_three,row_seven,row_eight
 from figures import pie_chart,bar_chart,table_stats,line_chart,heatmap
 import pandas as pd
 import plotly.graph_objs as go
@@ -9,7 +9,7 @@ from pathlib import Path
 
 # Variable that contains the external_stylesheet to use, in this case Bootstrap styling from dash bootstrap
 # components (dbc)
-external_stylesheets = [dbc.themes.VAPOR]
+external_stylesheets = [dbc.themes.BOOTSTRAP]
 
 # Define a variable that contains the meta tags
 meta_tags = [
@@ -25,8 +25,8 @@ app = Dash(__name__, external_stylesheets=external_stylesheets, meta_tags=meta_t
 # Add an HTML layout to the Dash app.
 # The layout is wrapped in a DBC Container()
 app.layout = dbc.Container([
-    row_one,row_four,row_five,row_two,row_three,
-    row_six,row_eight,row_seven
+    row_ten,row_one,row_ten,row_nine,row_eight,row_seven,row_ten,row_four,row_ten,row_five,row_ten,row_two,row_ten,row_three,
+    row_six
 ])
 
 

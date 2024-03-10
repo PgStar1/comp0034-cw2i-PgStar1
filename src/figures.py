@@ -66,13 +66,14 @@ def bar_chart(num_charts,selected_year):
     fig.add_trace(go.Bar(
         x=filtered_data['HE provider'][num_charts[0]:num_charts[1]],
         y=filtered_data['Total number of car parking spaces'][num_charts[0]:num_charts[1]],
-        name='car_spaces'
+        name='car_spaces',
+        #marker=dict(color=['teal','cyan'])
     ))
     fig.update_layout(title='How has the ratio of female:male participants changed?',
-        template="simple_white",
-        barmode= 'group',height = 800)
+        #template="simple_white",
+        barmode= 'group',height = 800,paper_bgcolor='#1a202c')
     fig.update_traces(marker_line_width=0.01)
-    fig.update_xaxes(ticklen=0)
+    fig.update_xaxes(ticklen=0,tickfont=dict(size=16,color='teal'))
     return fig
 
 def pie_chart(selected_provider,selected_year):
@@ -93,7 +94,7 @@ def pie_chart(selected_provider,selected_year):
     values = [cycle_spaces,car_spaces]
     figure = go.Figure(data=[go.Pie(labels=labels, values=values,title=dict(text = f'Pie Chart for {selected_provider} ({selected_year})',font=dict(size=16,color="red")))]).update_layout(height= 600,margin=dict(b=1,t=5,r=4,l=40),
     paper_bgcolor='rgba(0,0,0,0)',  # Set plot background color to transparent paper_bgcolor='powderblue'
-    legend=dict(x=0.8,y=0.84,font=dict(size=16,color='red'),# Show legend box
+    legend=dict(x=0.8,y=0.9,font=dict(size=16,color='red'),# Show legend box
         bgcolor='rgba(0,0,0,0)',  # Set background transparent
         bordercolor="gray",  # Add border for visual separation
         borderwidth=1)                                            )
@@ -128,7 +129,8 @@ def line_chart(selected_providers):
         fig.add_trace(go.Scatter(x=provider_data['Year'], y=provider_data['Total renewable energy generated onsite or offsite (kWh)'], mode='lines', name=provider))
     fig.update_layout(title='Energy Over Years for Selected Providers',
                       xaxis_title='Year',
-                      yaxis_title='Energy')
+                      yaxis_title='Energy',
+                      legend=dict(font=dict(size=13),orientation='h', xanchor='center', x=0.5, y=-0.2),height= 400,margin=dict(r=4,l=40))
     return fig
 
 """def heatmap(selected_providers):
@@ -153,7 +155,7 @@ def heatmap(selected_providers):
     filtered_data = all_data[all_data['HE provider'].isin(selected_providers)]
     filtered_data  = filtered_data.pivot(index='HE provider',columns='Year',values='Total renewable energy generated onsite or offsite (kWh)') 
     # Check if data is empty for the selected provider
-    fig = px.imshow(filtered_data,color_continuous_scale=px.colors.sequential.OrRd)
+    fig = px.imshow(filtered_data,color_continuous_scale=px.colors.sequential.Oranges)
     """heatmap_trace = go.Heatmap(
             x=filtered_data["Year"],
             #y=filtered_data["HE provider"],  # This value is likely not useful for a single provider
@@ -161,6 +163,7 @@ def heatmap(selected_providers):
             # colorscale='Viridis',  # Optional color scale customization
             # colorbar=dict(title='Energy Consumption')  # Optional color bar customization
         )"""
+    fig.update_layout(title='Energy Over Years for Selected Providers',height= 400)#,margin=dict(b=1,r=4,l=40))
     return fig
     # Return None if no data is found for the selected provider
 
