@@ -2,3 +2,10 @@
 dash
 dash-bootstrap-components
 pandas
+requests
+# For testing
+pytest
+pytest-cov
+selenium
+# pytest-flask
+dash[testing]
