@@ -71,7 +71,7 @@ def bar_chart(num_charts,selected_year):
     ))
     fig.update_layout(title='How has the ratio of female:male participants changed?',
         #template="simple_white",
-        barmode= 'group',height = 800,paper_bgcolor='#1a202c')
+        barmode= 'group',height = 800,paper_bgcolor='#FFFFFF')
     fig.update_traces(marker_line_width=0.01)
     fig.update_xaxes(ticklen=0,tickfont=dict(size=16,color='teal'))
     return fig
@@ -126,11 +126,13 @@ def line_chart(selected_providers):
     fig = go.Figure()
     for provider in selected_providers:
         provider_data = filtered_data[filtered_data['HE provider'] == provider]
-        fig.add_trace(go.Scatter(x=provider_data['Year'], y=provider_data['Total renewable energy generated onsite or offsite (kWh)'], mode='lines', name=provider))
+        fig.add_trace(go.Scatter(x=provider_data['Year'], y=provider_data['Total renewable energy generated onsite or offsite (kWh)'], mode='lines+markers', name=provider,
+                                 line=dict(width=1,shape='spline',smoothing=1.3),
+                                 marker=dict(size=10)))
     fig.update_layout(title='Energy Over Years for Selected Providers',
                       xaxis_title='Year',
                       yaxis_title='Energy',
-                      legend=dict(font=dict(size=13),orientation='h', xanchor='center', x=0.5, y=-0.2),height= 400,margin=dict(r=4,l=40))
+                      legend=dict(font=dict(size=13),orientation='h', xanchor='center', x=0.5, y=-0.2),height= 400,margin=dict(r=4,l=40),paper_bgcolor='#3498db')
     return fig
 
 """def heatmap(selected_providers):
@@ -146,6 +148,7 @@ def line_chart(selected_providers):
     #colorbar=dict(title='Energy Consumption')
 )
     return heatmap_trace"""
+colorscale= [[0,'#f7fb77'],[0.2,'#cce6ff'],[0.4,'#99ccff'],[0.6,'#66b3ff'],[0.8,'#3399ff'],[1,'#0066ff']]
 
 def heatmap(selected_providers):
 

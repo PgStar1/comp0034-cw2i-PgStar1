@@ -52,6 +52,12 @@ checklist = dbc.RadioItems(id = 'checklist',
                                     {"label": "2021/22", "value": "2021/22"}],
                           value = ["2015/16"],
                           inline = True,
+                          style={'background-color': '#2ecc71',
+                             'color': 'white',
+                             'border-radius':'5px',
+                             'padding':'10px 40px',
+                             'border':'none',
+                             'cursor':'pointer'}
                           #type= 'radio'
 )
 Stats = {'Max_cycle_spaces': dataset_2022["cycle_spaces"].max(),
@@ -87,7 +93,7 @@ Table =  dash_table.DataTable(
 dropdown = dcc.Dropdown(id = 'dropdown',
                       #options = dropdown_options,
                       value='',
-                      placeholder='Select HE provider'
+                      placeholder='Select HE provider',
                       #search=True, 
                       #clearable=True
 )
@@ -113,14 +119,14 @@ range_slider = dcc.RangeSlider(
             id="he-provider-slider",
             min=1,
             max=len(all_data['HE provider'].unique()),
-            value=[1, 9],  # Default to show all providers
+            value=[89, 97],  # Default to show all providers
             #marks={str(i): i for i in range(min, max + 1)},
             tooltip={"placement": "bottom"},
         )
 row_one = html.Div(
     dbc.Row([
         dbc.Col(children=[html.H1("TRANSPORT AND ENVIRONMENT METRICS AT VARIOUS HIGHER EDUCATION PROVIDERS")
-                 ], width=9,style={'background-color': '#1a202c','color': '#4fd1c5'}),
+                 ], width=9,style={'font':'Lato','background-color': '#1a202c','color': '#4fd1c5'}),
         dbc.Col(children=[
             html.Img(src='/assets/logo.jpg', style={'top': '10px', 'right': '10px','width': '200px', 'height': '200px'}),
         ], width=3)
