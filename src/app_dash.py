@@ -24,8 +24,8 @@ app = Dash(__name__, external_stylesheets=external_stylesheets, meta_tags=meta_t
 
 navbar = dbc.NavbarSimple(
     children=[
-        dbc.NavItem(dbc.NavLink("Event Details", href=dash.page_registry['pages.events']['path'])),
-        dbc.NavItem(dbc.NavLink("Charts", href=dash.page_registry['pages.charts']['path'])),
+        dbc.NavItem(dbc.NavLink("Event Details", href=dash.page_registry['pages.energypage']['path'])),
+        dbc.NavItem(dbc.NavLink("Charts", href=dash.page_registry['pages.parking_spaces']['path'])),
     ],
     brand="Paralympics Dashboard",
     brand_href="#",
