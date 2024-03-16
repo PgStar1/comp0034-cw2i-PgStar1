@@ -132,7 +132,7 @@ def line_chart(selected_providers):
     fig.update_layout(title='Energy Over Years for Selected Providers',
                       xaxis_title='Year',
                       yaxis_title='Energy',
-                      legend=dict(font=dict(size=13),orientation='h', xanchor='center', x=0.5, y=-0.2),height= 400,margin=dict(r=4,l=40),paper_bgcolor='#3498db')
+                      legend=dict(font=dict(size=13),orientation='h', xanchor='center', x=0.5, y=-0.2),height= 700,margin=dict(r=4,l=40),paper_bgcolor= '#FFFFFF')#'#3498db')
     return fig
 
 """def heatmap(selected_providers):
@@ -166,7 +166,7 @@ def heatmap(selected_providers):
             # colorscale='Viridis',  # Optional color scale customization
             # colorbar=dict(title='Energy Consumption')  # Optional color bar customization
         )"""
-    fig.update_layout(title='Energy Over Years for Selected Providers',height= 400)#,margin=dict(b=1,r=4,l=40))
+    fig.update_layout(title='Energy Over Years for Selected Providers',height= 700)#,margin=dict(b=1,r=4,l=40))
     return fig
     # Return None if no data is found for the selected provider
 

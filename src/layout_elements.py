@@ -52,8 +52,8 @@ checklist = dbc.RadioItems(id = 'checklist',
                                     {"label": "2021/22", "value": "2021/22"}],
                           value = ["2015/16"],
                           inline = True,
-                          style={'background-color': '#2ecc71',
-                             'color': 'white',
+                          style={#'background-color': '#2ecc71',
+                             'color': 'teal',
                              'border-radius':'5px',
                              'padding':'10px 40px',
                              'border':'none',
@@ -180,10 +180,10 @@ row_six = html.Div(
 row_seven = html.Div(
     dbc.Row([dbc.Col(children=[dcc.Graph(id='line', figure = line)
             #html.Img(src=app.get_asset_url('line-chart-placeholder.png'), className="img-fluid"),
-        ], width=6),dbc.Col(children=[dcc.Graph(id='heat', figure = heat)
+        ], width=12)])) 
+row_eleven = html.Div(dbc.Row([dbc.Col(children=[dcc.Graph(id='heat', figure = heat)
             #html.Img(src=app.get_asset_url('line-chart-placeholder.png'), className="img-fluid"),
-        ], width=6)])) 
-
+        ], width=12)]))
 row_eight = html.Div(
     dbc.Row([dbc.Col(children=[dropdown2
             #html.Img(src=app.get_asset_url('line-chart-placeholder.png'), className="img-fluid"),
