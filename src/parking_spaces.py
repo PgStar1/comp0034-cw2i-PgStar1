@@ -1,5 +1,5 @@
 
-from dash import Dash, html, dcc,register_page, get_asset_url
+from dash import Dash, html, dcc,register_page, get_asset_url,callback, Input, Output
 import dash_bootstrap_components as dbc
 from figures import bar_chart,pie_chart,line_chart,heatmap
 from pathlib import Path
@@ -7,21 +7,34 @@ import pandas as pd
 from dash import dash_table
 #data = Path(__file__).parent.parent.joinpath("data", "prepared6.csv")
 #df = pd.read_csv(data)
-data = Path(__file__).parent.parent.joinpath("data", "prepared.csv")
-dataset_2016 = pd.read_csv(data)
-data1 = Path(__file__).parent.parent.joinpath("data", "prepared1.csv")
+try:
+    
+    data = Path(__file__).parent.parent.joinpath("src\data", "prepared.csv")
+    dataset_2016 = pd.read_csv(data)
+    print("File successfully loaded.")
+except FileNotFoundError:
+    print("Error: File not found.")
+except Exception as e:
+    print("Error:", e)
+dataset_2016['Year'] = 2016
+data1 = Path(__file__).parent.parent.joinpath("src\data", "prepared1.csv")
 dataset_2017 = pd.read_csv(data1)
-data2 = Path(__file__).parent.parent.joinpath("data", "prepared2.csv")
+dataset_2017['Year'] = 2017
+data2 = Path(__file__).parent.parent.joinpath("src\data", "prepared2.csv")
 dataset_2018 = pd.read_csv(data2)
-data3 = Path(__file__).parent.parent.joinpath("data", "prepared3.csv")
+dataset_2018['Year'] = 2018
+data3 = Path(__file__).parent.parent.joinpath("src\data", "prepared3.csv")
 dataset_2019 = pd.read_csv(data3)
-data4 = Path(__file__).parent.parent.joinpath("data", "prepared4.csv")
+dataset_2019['Year'] = 2019
+data4 = Path(__file__).parent.parent.joinpath("src\data", "prepared4.csv")
 dataset_2020 = pd.read_csv(data4)
-data5 = Path(__file__).parent.parent.joinpath("data", "prepared5.csv")
+dataset_2020['Year'] = 2020
+data5 = Path(__file__).parent.parent.joinpath("src\data", "prepared5.csv")
 dataset_2021 = pd.read_csv(data5)
-data6 = Path(__file__).parent.parent.joinpath("data", "prepared6.csv")
+dataset_2021['Year'] = 2021
+data6 = Path(__file__).parent.parent.joinpath("src\data", "prepared6.csv")
 dataset_2022 = pd.read_csv(data6)
-
+dataset_2022['Year'] = 2022
 all_data = pd.concat([dataset_2016,dataset_2017,dataset_2018,dataset_2019,dataset_2020, dataset_2021], ignore_index=True)
 
 
@@ -121,3 +134,44 @@ layout = dbc.Container([
     row_three,
     row_six
 ])
+
+@callback(
+    Output('dropdown', 'options'),
+    [Input('checklist', 'value')]
+)
+def update_provider_dropdown(selected_years):
+    providers = set()
+    #for year in selected_years:
+    if isinstance(selected_years, list):
+        selected_years = selected_years[0]
+    providers.update(year_datasets[selected_years]['HE provider'].unique())
+    options = [{'label': provider, 'value': provider} for provider in sorted(providers)]#sorted(providers)]
+    return options
+
+@callback(
+    Output(component_id = 'pie',component_property='figure'),
+    [Input(component_id = 'dropdown',component_property='value'),
+    Input(component_id = 'checklist',component_property = 'value')]
+)
+
+def update_pie_chart(provider,num):
+    #years = ['2016','2017','2018','2019','2020','2021']
+    #if num in years:
+    #df = pd.read_csv('your_data.csv')
+    
+    figure = pie_chart(provider,num)
+    return figure
+
+@callback(
+    Output(component_id = 'bar',component_property='figure'),
+    [Input(component_id = 'he-provider-slider',component_property='value'),
+    Input(component_id = 'search-input',component_property='value'),
+    Input(component_id = 'checklist',component_property = 'value')]
+    
+)
+
+def update_bar_chart(selected_value,search_term,selected_year):
+    #df = pd.read_csv('your_data.csv')
+    #filtered_df = df[df['HE provider'].str.contains(search_term, case=False)] if search_term else df
+    figure = bar_chart(selected_value,selected_year)
+    return figure

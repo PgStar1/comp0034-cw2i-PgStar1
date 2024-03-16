@@ -3,25 +3,32 @@ import plotly.graph_objs as go
 import pandas as pd
 import plotly.express as px
 
-data = Path(__file__).parent.parent.joinpath("data", "prepared.csv")
-dataset_2016 = pd.read_csv(data)
+try:
+    
+    data = Path(__file__).parent.parent.joinpath("src\data", "prepared.csv")
+    dataset_2016 = pd.read_csv(data)
+    print("File successfully loaded.")
+except FileNotFoundError:
+    print("Error: File not found.")
+except Exception as e:
+    print("Error:", e)
 dataset_2016['Year'] = 2016
-data1 = Path(__file__).parent.parent.joinpath("data", "prepared1.csv")
+data1 = Path(__file__).parent.parent.joinpath("src\data", "prepared1.csv")
 dataset_2017 = pd.read_csv(data1)
 dataset_2017['Year'] = 2017
-data2 = Path(__file__).parent.parent.joinpath("data", "prepared2.csv")
+data2 = Path(__file__).parent.parent.joinpath("src\data", "prepared2.csv")
 dataset_2018 = pd.read_csv(data2)
 dataset_2018['Year'] = 2018
-data3 = Path(__file__).parent.parent.joinpath("data", "prepared3.csv")
+data3 = Path(__file__).parent.parent.joinpath("src\data", "prepared3.csv")
 dataset_2019 = pd.read_csv(data3)
 dataset_2019['Year'] = 2019
-data4 = Path(__file__).parent.parent.joinpath("data", "prepared4.csv")
+data4 = Path(__file__).parent.parent.joinpath("src\data", "prepared4.csv")
 dataset_2020 = pd.read_csv(data4)
 dataset_2020['Year'] = 2020
-data5 = Path(__file__).parent.parent.joinpath("data", "prepared5.csv")
+data5 = Path(__file__).parent.parent.joinpath("src\data", "prepared5.csv")
 dataset_2021 = pd.read_csv(data5)
 dataset_2021['Year'] = 2021
-data6 = Path(__file__).parent.parent.joinpath("data", "prepared6.csv")
+data6 = Path(__file__).parent.parent.joinpath("src\data", "prepared6.csv")
 dataset_2022 = pd.read_csv(data6)
 dataset_2022['Year'] = 2022
 

@@ -19,7 +19,7 @@ meta_tags = [
 
 
 # Pass the stylesheet variable to the Dash app constructor
-app = Dash(__name__, external_stylesheets=external_stylesheets, meta_tags=meta_tags, use_pages = True)
+app = Dash(__name__, external_stylesheets=external_stylesheets, meta_tags=meta_tags, use_pages=True)
 
 
 navbar = dbc.NavbarSimple(
@@ -44,19 +44,26 @@ app.layout = html.Div([
 ])
 
 
-data = Path(__file__).parent.parent.joinpath("data", "prepared.csv")
-dataset_2016 = pd.read_csv(data)
-data1 = Path(__file__).parent.parent.joinpath("data", "prepared1.csv")
+"""try:
+    
+    data = Path(__file__).parent.parent.joinpath("src\data", "prepared.csv")
+    dataset_2016 = pd.read_csv(data)
+    print("File16 successfully loaded.")
+except FileNotFoundError:
+    print("Error: File not found.")
+except Exception as e:
+    print("Error:", e)
+data1 = Path(__file__).parent.parent.joinpath("src\data", "prepared1.csv")
 dataset_2017 = pd.read_csv(data1)
-data2 = Path(__file__).parent.parent.joinpath("data", "prepared2.csv")
+data2 = Path(__file__).parent.parent.joinpath("src\data", "prepared2.csv")
 dataset_2018 = pd.read_csv(data2)
-data3 = Path(__file__).parent.parent.joinpath("data", "prepared3.csv")
+data3 = Path(__file__).parent.parent.joinpath("src\data", "prepared3.csv")
 dataset_2019 = pd.read_csv(data3)
-data4 = Path(__file__).parent.parent.joinpath("data", "prepared4.csv")
+data4 = Path(__file__).parent.parent.joinpath("src\data", "prepared4.csv")
 dataset_2020 = pd.read_csv(data4)
-data5 = Path(__file__).parent.parent.joinpath("data", "prepared5.csv")
+data5 = Path(__file__).parent.parent.joinpath("src\data", "prepared5.csv")
 dataset_2021 = pd.read_csv(data5)
-data6 = Path(__file__).parent.parent.joinpath("data", "prepared6.csv")
+data6 = Path(__file__).parent.parent.joinpath("src\data", "prepared6.csv")
 dataset_2022 = pd.read_csv(data6)
 
 year_datasets = {
@@ -111,7 +118,7 @@ def update_bar_chart(selected_value,search_term,selected_year):
     figure = bar_chart(selected_value,selected_year)
     return figure
     
-    """figure = bar_chart(num_bars)
+    figure = bar_chart(num_bars)
     filtered_df = df[df['HE provider'].str.contains(search_term, case=False)] if search_term else df
     if not filtered_df.empty:
         for col in filtered_df.columns[1:3]:  # Skip the 'HE provider' column
@@ -145,7 +152,7 @@ def update_bar_chart(selected_value,search_term,selected_year):
     # Update layout (optional)
     fig.update_layout(title='Bar Chart - HE Provider Search')
 
-    return fig, selected_value  # Return both figure and slider value"""
+    return fig, selected_value  # Return both figure and slider value
 
 @app.callback(
     Output(component_id = 'table',component_property='figure'),
@@ -169,7 +176,7 @@ def update_line_chart(selected_provider):
     figure1 = heatmap(selected_provider)#,selected_provider)
     return figure,figure1
 
-"""@app.callback(
+@app.callback(
     Output(component_id='heat', component_property='figure'),
     [Input(component_id='provider-dropdown', component_property='value')]
      #Input(component_id='provider-dropdown', component_property='value')]
