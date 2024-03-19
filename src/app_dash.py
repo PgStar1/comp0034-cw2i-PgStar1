@@ -7,7 +7,7 @@ from figures import pie_chart,bar_chart,table_stats,line_chart,heatmap
 import pandas as pd
 import plotly.graph_objs as go
 from pathlib import Path
-
+from pages import energypage,parking_spaces 
 # Variable that contains the external_stylesheet to use, in this case Bootstrap styling from dash bootstrap
 # components (dbc)
 external_stylesheets = [dbc.themes.BOOTSTRAP]
@@ -19,30 +19,108 @@ meta_tags = [
 
 
 # Pass the stylesheet variable to the Dash app constructor
-app = Dash(__name__, external_stylesheets=external_stylesheets, meta_tags=meta_tags, use_pages=True)
+app = Dash(__name__, suppress_callback_exceptions=True,external_stylesheets=external_stylesheets,meta_tags=meta_tags)#use_pages=True,pages_folder="pages")
 
 
 navbar = dbc.NavbarSimple(
     children=[
-        dbc.NavItem(dbc.NavLink("Event Details", href=dash.page_registry['pages.energypage']['path'])),
-        dbc.NavItem(dbc.NavLink("Charts", href=dash.page_registry['pages.parking_spaces']['path'])),
-    ],
-    brand="Paralympics Dashboard",
-    brand_href="#",
-    color="primary",
-    dark=True,
+        dbc.NavItem(dbc.NavLink("Click here for information about Parking Spaces", href = '/spaces'))],#href=dash.page_registry['pages.parking_spaces']['path'])),
+    
+    #brand="Paralympics Dashboard",
+    #brand_href="#",#brand="Navigation 1",
+                color="dark",
+                dark=True,
+                expand="md",
+                style={'position': 'absolute', 'top': 0, 'left': 0, 'right': 0, 'z-index': 1000}
+    #color="primary",
+    #dark=True,
+)
+
+navbar1 = dbc.NavbarSimple(
+    children=[dbc.NavItem(dbc.NavLink("Click here for information about Renewable Energy",href= '/energy'))],#href=dash.page_registry['pages.energypage']['path']))],
+    #brand_href="#",#brand="Navigation 1",
+                color="dark",
+                dark=True,
+                expand="md",
+                style={'position': 'absolute', 'top': 0, 'left': 0, 'right': 0, 'z-index': 1000}
 )
 # Variables that define the three rows of the layout
 
 # Add an HTML layout to the Dash app.
 # The layout is wrapped in a DBC Container()
-app.layout = html.Div([
-    navbar,
-    dash.page_container
+"""app.layout = html.Div([
+    dbc.Row([dbc.Col(children=[],width=1),
+        dbc.Col(children=[html.H1("TRANSPORT AND ENVIRONMENT METRICS AT VARIOUS HIGHER EDUCATION PROVIDERS")
+                 ], width=8,style={'height': '200px','font':'Lato','background-color': '#1a202c','color': '#4fd1c5'}),
+        dbc.Col(children=[
+            html.Img(src='/assets/logo.jpg', style={'top': '10px', 'right': '10px','width': '200px', 'height': '200px'}),
+        ], width=3)
+                
+    ]),html.Br(),
+    dbc.Row([dbc.Col(children=[],width=1),dbc.Col(html.Img(src='/assets/energy.jpg', style={'top': '10px', 'right': '10px', 'height': '300px'}),
+                     navbar1,
+                     width=5),
+             dbc.Col(dbc.Col(html.Img(src='/assets/parking.jpg', alt="Navbar Background Image", fluid=True,style={'top': '10px', 'right': '90px', 'height': '300px'}),
+                     #children=[navbar1],
+                     width=6),style={'object-fit': 'cover','margin-right': '100px','margin': '0', 'padding': '50','background-size': 'cover'})
     #row_ten,row_one,row_ten,row_nine,row_seven,row_ten,row_eight,row_ten,row_eleven,row_ten,row_four,row_ten,row_five,row_ten,row_two,row_ten,row_three,
     #row_six
+]),dash.page_container])"""
+
+
+
+app.layout = html.Div([
+    dbc.Row([dbc.Col(children=[],width=1),
+        dbc.Col(html.H1("TRANSPORT AND ENVIRONMENT METRICS AT VARIOUS HIGHER EDUCATION PROVIDERS"),
+                width=8,
+                style={'height': '200px', 'font': 'Lato', 'background-color': '#1a202c', 'color': '#4fd1c5'}
+                ),
+        dbc.Col(html.Img(src='/assets/logo.jpg', style={'top': '10px', 'right': '10px', 'height': '200px'}),
+                width=3),
+    ]),
+    html.Br(),
+    dbc.Row([dbc.Col(children=[],width=1),dbc.Col(
+            dbc.Card(
+                dbc.CardBody([
+                    #html.H5("Card title", className="card-title"),
+                    #html.P("This is some card content"),
+                    navbar
+                    #dbc.Button("Button", color="primary")
+                ]),
+                style={'background-image': 'url("/assets/parking.jpg")', 'height': '400px','background-size': 'cover'}
+            ),
+            width=5
+        ),dbc.Col(
+            dbc.Card(
+                dbc.CardBody([
+                   # html.H5("Card title", className="card-title"),
+                    #html.P("This is some card content"),
+                    navbar1
+                    #dbc.Button("Button", color="primary")
+                ]),
+                style={'transition': 'filter 0.3s ease-in-out','background-image': 'url("/assets/renewable.jpg")', 'height': '400px','background-size': 'cover'}
+            ),
+            width=5
+        )]),
+    dcc.Location(id = 'url',refresh = False,pathname= ''),
+    html.Div(id= 'page-content',children=[]),
+    #html.H2("Click here for information about Renewable Energy", id='energy'),
+    html.A('Go to top', href='#top'),
+    dash.page_container
 ])
 
+@app.callback(Output(component_id='page-content',component_property='children'),
+              [Input(component_id='url',component_property='pathname')])
+
+def display_page_content(pathname):
+    #global is_home
+    if pathname == '/energy':
+        #is_home = True
+        return energypage.layout
+    if pathname == '/spaces':
+        return parking_spaces.layout
+    else:
+        return None
 
 """try:
     
