@@ -76,7 +76,7 @@ def bar_chart(num_charts,selected_year):
         name='car_spaces',
         #marker=dict(color=['teal','cyan'])
     ))
-    fig.update_layout(title='How has the ratio of female:male participants changed?',
+    fig.update_layout(title='How does car parking spaces compare to cycle spaces for different Higher Education Providers?',
         #template="simple_white",
         barmode= 'group',height = 800,paper_bgcolor='#FFFFFF')
     fig.update_traces(marker_line_width=0.01)

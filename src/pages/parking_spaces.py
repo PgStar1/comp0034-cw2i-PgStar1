@@ -54,8 +54,40 @@ heat = heatmap(['The University of Greenwich'])
 column_values = dataset_2022['HE provider'].unique()
 
 #register_page(__name__, name="Parking", title="parking", path="/c")
+navbar2 = dbc.NavbarSimple(
+    children=[
+        dbc.NavItem(dbc.NavLink("Go to home page", href = '/home'))],#href=dash.page_registry['pages.parking_spaces']['path'])),
+    
+    #brand="Paralympics Dashboard",
+    #brand_href="#",#brand="Navigation 1",
+                color="dark",
+                dark=True,
+                #expand="md",
+                style={'position': 'absolute', 'top': 0, 'left': 0, 'right': 0, 'z-index': 1000}
+    #color="primary",
+    #dark=True,
+)
 
 checklist = dbc.RadioItems(id = 'checklist',
+                          options = [{"label": "2015/16", "value": "2015/16"},
+                                    {"label": "2016/17", "value": "2016/17"},
+                                    {"label": "2017/18", "value": "2017/18"},
+                                    {"label": "2018/19", "value": "2018/19"},
+                                    {"label": "2019/20", "value": "2019/20"},
+                                    {"label": "2020/21", "value": "2020/21"},
+                                    {"label": "2021/22", "value": "2021/22"}],
+                          value = ["2015/16"],
+                          inline = True,
+                          style={#'background-color': '#2ecc71',
+                             'color': 'teal',
+                             'border-radius':'5px',
+                             'padding':'10px 40px',
+                             'border':'none',
+                             'cursor':'pointer'}
+                          #type= 'radio'
+)
+
+checklist1 = dbc.RadioItems(id = 'checklist1',
                           options = [{"label": "2015/16", "value": "2015/16"},
                                     {"label": "2016/17", "value": "2016/17"},
                                     {"label": "2017/18", "value": "2017/18"},
@@ -86,9 +118,17 @@ range_slider = dcc.RangeSlider(
 dropdown = dcc.Dropdown(id = 'dropdown',
                       #options = dropdown_options,
                       value='',
-                      placeholder='Select HE provider',
+                      placeholder='Select University',
                       #search=True, 
                       #clearable=True
+)
+
+row_one = html.Div(
+    dbc.Row([dbc.Col(html.Div("Adjust the range to select a number of universities to display:", style={'font-weight': 'bold'}))])
+)
+
+row_eleven = html.Div(
+    dbc.Row([dbc.Col(html.Div("Select a year to display the bar charts for:", style={'font-weight': 'bold'}))])
 )
 
 row_five = html.Div(
@@ -105,15 +145,31 @@ row_two = html.Div(
         ], width=12),])
     ) 
 
+row_21 = html.Div(
+    dbc.Row([dbc.Col(html.H1("Parking Spaces Page"), width=12),]),#className="mb-4",
+    ) 
+
+row_22 = html.Div(
+    dbc.Row([dbc.Col(html.P("Welcome to the parking spaces page!"), width=12)])
+    ) 
+
 row_three = html.Div(
     dbc.Row([dbc.Col(children=[dropdown
             #html.Img(src=app.get_asset_url('line-chart-placeholder.png'), className="img-fluid"),
         ], width=6),
              dbc.Col(children=[
                  checklist,
-    ], width =5)]))
+    ], width =6)]))
+
+row_seven = html.Div(dbc.Row([dbc.Col(children=[checklist1
+            #html.Img(src=app.get_asset_url('line-chart-placeholder.png'), className="img-fluid"),
+        ], width=12)]))
 
 row_ten = html.Br()
+
+row_twelve = html.Div(
+    dbc.Row([dbc.Col(children=[],width=3),dbc.Col(html.Div("Select the university and a year to display the pie chart for:", style={'font-weight': 'bold'}))])
+)
 
 row_six = html.Div(
     dbc.Row([dbc.Col(children=[],width=1),dbc.Col(children=[
@@ -123,19 +179,34 @@ row_six = html.Div(
         dbc.Col(children=[],width=1)])
     )
 
+row_20 = html.Div(
+    dbc.Row([dbc.Col(children=[navbar2],width=1)])
+    )
+
 layout = dbc.Container([
     row_ten,
+    row_ten,
+    row_ten,
+    row_21,
+    row_22,
+    row_eleven,
+    row_seven,
+    row_ten,
+    row_one,
+    row_two,
     row_five,
     row_ten,
-    row_two,
+    row_ten,
+    row_twelve,
     row_ten,
     row_three,
-    row_six
+    row_six,
+    row_20
 ])
 
 @callback(
     Output('dropdown', 'options'),
-    [Input('checklist', 'value')],allow_duplicate=True
+    [Input('checklist', 'value')],allow_duplicates=True
 )
 def update_provider_dropdown(selected_years):
     providers = set()
@@ -149,7 +220,7 @@ def update_provider_dropdown(selected_years):
 @callback(
     Output(component_id = 'pie',component_property='figure'),
     [Input(component_id = 'dropdown',component_property='value'),
-    Input(component_id = 'checklist',component_property = 'value')],allow_duplicate=True
+    Input(component_id = 'checklist',component_property = 'value')],allow_duplicates=True
 )
 
 def update_pie_chart(provider,num):
@@ -164,7 +235,8 @@ def update_pie_chart(provider,num):
     Output(component_id = 'bar',component_property='figure'),
     [Input(component_id = 'he-provider-slider',component_property='value'),
     #Input(component_id = 'search-input',component_property='value'),
-    Input(component_id = 'checklist',component_property = 'value')],allow_duplicate=True
+    Input(component_id = 'checklist1',component_property = 'value')],
+    allow_duplicates=True
     
 )
 

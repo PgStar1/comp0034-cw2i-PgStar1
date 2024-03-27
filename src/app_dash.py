@@ -1,5 +1,5 @@
 # This version is after the final activity in week 7
-import dash
+"""import dash
 from dash import Dash, html, dcc,Output, Input
 import dash_bootstrap_components as dbc
 #from layout_elements import row_eleven,row_one,row_ten,row_four,row_nine,row_five,row_six,row_two,row_three,row_seven,row_eight
@@ -7,7 +7,7 @@ from figures import pie_chart,bar_chart,table_stats,line_chart,heatmap
 import pandas as pd
 import plotly.graph_objs as go
 from pathlib import Path
-from pages import energypage,parking_spaces 
+from pages import energypage,parking_spaces,home
 # Variable that contains the external_stylesheet to use, in this case Bootstrap styling from dash bootstrap
 # components (dbc)
 external_stylesheets = [dbc.themes.BOOTSTRAP]
@@ -20,9 +20,9 @@ meta_tags = [
 
 # Pass the stylesheet variable to the Dash app constructor
 app = Dash(__name__, suppress_callback_exceptions=True,external_stylesheets=external_stylesheets,meta_tags=meta_tags)#use_pages=True,pages_folder="pages")
+"""
 
-
-navbar = dbc.NavbarSimple(
+"""navbar = dbc.NavbarSimple(
     children=[
         dbc.NavItem(dbc.NavLink("Click here for information about Parking Spaces", href = '/spaces'))],#href=dash.page_registry['pages.parking_spaces']['path'])),
     
@@ -30,20 +30,20 @@ navbar = dbc.NavbarSimple(
     #brand_href="#",#brand="Navigation 1",
                 color="dark",
                 dark=True,
-                expand="md",
+                #expand="md",
                 style={'position': 'absolute', 'top': 0, 'left': 0, 'right': 0, 'z-index': 1000}
     #color="primary",
     #dark=True,
-)
+)"""
 
-navbar1 = dbc.NavbarSimple(
+"""navbar1 = dbc.NavbarSimple(
     children=[dbc.NavItem(dbc.NavLink("Click here for information about Renewable Energy",href= '/energy'))],#href=dash.page_registry['pages.energypage']['path']))],
     #brand_href="#",#brand="Navigation 1",
                 color="dark",
                 dark=True,
-                expand="md",
+                #expand="md",
                 style={'position': 'absolute', 'top': 0, 'left': 0, 'right': 0, 'z-index': 1000}
-)
+)"""
 # Variables that define the three rows of the layout
 
 # Add an HTML layout to the Dash app.
@@ -69,7 +69,7 @@ navbar1 = dbc.NavbarSimple(
 
 
 
-app.layout = html.Div([
+"""app.layout = html.Div([
     dbc.Row([dbc.Col(children=[],width=1),
         dbc.Col(html.H1("TRANSPORT AND ENVIRONMENT METRICS AT VARIOUS HIGHER EDUCATION PROVIDERS"),
                 width=8,
@@ -105,22 +105,30 @@ app.layout = html.Div([
     dcc.Location(id = 'url',refresh = False,pathname= ''),
     html.Div(id= 'page-content',children=[]),
     #html.H2("Click here for information about Renewable Energy", id='energy'),
-    html.A('Go to top', href='#top'),
+    html.A('Go to top', href='top',style={'background-color': 'gray', 'color': 'white', 'padding': '10px'}),
     dash.page_container
-])
+])"""
+
+"""app.layout=html.Div([
+    dcc.Location(id = 'url',refresh = False,pathname= ''),
+    html.Div(id= 'page-content',children=[]),
+    dash.page_container])
 
 @app.callback(Output(component_id='page-content',component_property='children'),
               [Input(component_id='url',component_property='pathname')])
 
 def display_page_content(pathname):
     #global is_home
+    if pathname == '/home':
+        is_home = True
+        return home.layout
     if pathname == '/energy':
         #is_home = True
         return energypage.layout
     if pathname == '/spaces':
         return parking_spaces.layout
     else:
-        return None
+        return None"""
 
 """try:
     
@@ -264,6 +272,58 @@ def update_heat_chart(selected_provider):#,selected_provider):
     return figure"""
 
 # Run the Dash app
+"""if __name__ == '__main__':
+    app.run(debug=True)"""
+    # Runs on port 8050 by default. If you have a port conflict, add the parameter port=   e.g. port=8051
+    
+import dash
+from dash import Dash, html, dcc,Output, Input
+import dash_bootstrap_components as dbc
+#from layout_elements import row_eleven,row_one,row_ten,row_four,row_nine,row_five,row_six,row_two,row_three,row_seven,row_eight
+from figures import pie_chart,bar_chart,table_stats,line_chart,heatmap
+import pandas as pd
+import plotly.graph_objs as go
+from pathlib import Path
+from pages import energypage,parking_spaces,home
+
+external_stylesheets = [dbc.themes.BOOTSTRAP]
+app = dash.Dash(__name__, suppress_callback_exceptions=True,external_stylesheets=external_stylesheets)
+
+app.layout = html.Div([
+    dcc.Location(id='url', refresh=False),
+    html.Div(id='page-content'),
+    html.A('Go to top', href='#top', id='top-link', style={'background-color': 'gray', 'color': 'white', 'padding': '10px'})
+])
+
+@app.callback(
+    Output(component_id='page-content', component_property='children'),
+    [Input(component_id='url', component_property='pathname')]
+)
+def display_page(pathname):
+    
+    if not pathname or pathname == '/':
+        # If no pathname (first load), display the home page
+        return home.layout
+    
+    elif pathname == '/home':
+        return home.layout
+    elif pathname == '/energy':
+        return energypage.layout
+    elif pathname == '/spaces':
+        return parking_spaces.layout
+    else:
+        return html.Div("404 - Page not found")
+    
+    
+@app.callback(
+    Output('top-link', 'style'),
+    [Input('url', 'pathname')]
+)
+def update_top_link_style(pathname):
+    if pathname == '/home':
+        return {'display': 'none'}  # Hide the link on the home page
+    else:
+        return {'background-color': 'gray', 'color': 'white', 'padding': '10px'}
+
 if __name__ == '__main__':
     app.run(debug=True)
-    # Runs on port 8050 by default. If you have a port conflict, add the parameter port=   e.g. port=8051

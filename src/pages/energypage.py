@@ -66,7 +66,25 @@ dropdown2 = dcc.Dropdown(
         multi= True
     )
 
+navbar2 = dbc.NavbarSimple(
+    children=[
+        dbc.NavItem(dbc.NavLink("Go to home page", href = '/home'))],#href=dash.page_registry['pages.parking_spaces']['path'])),
+    
+    #brand="Paralympics Dashboard",
+    #brand_href="#",#brand="Navigation 1",
+                color="dark",
+                dark=True,
+                #expand="md",
+                style={'position': 'absolute', 'top': 0, 'left': 0, 'right': 0, 'z-index': 1000}
+    #color="primary",
+    #dark=True,
+)
+
 row_ten = html.Br()
+
+row_20 = html.Div(
+    dbc.Row([dbc.Col(children=[navbar2],width=1)])
+    )
 
 row_seven = html.Div(
     dbc.Row([dbc.Col(children=[dcc.Graph(id='line', figure = line)
@@ -87,7 +105,8 @@ layout = dbc.Container([
     row_ten,
     row_eight,
     row_ten,
-    row_eleven
+    row_eleven,
+    row_20
 ])
 
 @callback(
