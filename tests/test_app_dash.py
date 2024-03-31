@@ -1,7 +1,10 @@
 import requests
+import time
 from dash.testing.application_runners import import_app
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 
@@ -112,3 +115,67 @@ def test_line_chart_selection(dash_duo):
     css_selector = '#line > div.js-plotly-plot > div > div > svg:nth-child(2) > g.infolayer > g.g-gtitle > text'
     chart_title = dash_duo.find_element(css_selector)
     assert ("Energy" in chart_title.text), "'sports' should appear in the chart title"
+    
+def test_nav_link_charts(dash_duo):
+    """
+    Check the nav link works and leads to the charts page.
+    """
+    app = import_app(app_file="app_dash")
+    dash_duo.start_server(app)
+    # Delay just so I can visually check the page is loaded, this isn't necessary!
+    time.sleep(2)
+
+    # Wait for the navlink to be visible
+    """dash_duo.wait_for_element("parking", timeout=4)
+
+    # Click on the navlink
+    dash_duo.driver.find_element(By.ID, "parking").click()"""
+    
+    navlink = WebDriverWait(dash_duo.driver, 10).until(
+        EC.visibility_of_element_located((By.ID, "parking"))
+    )
+
+    # Click on the navlink
+    navlink.click()
+
+    # Delay just so I can visually check the page is loaded, this isn't necessary!
+    time.sleep(2)
+
+    # Check the page url includes "charts"
+    #dash_duo.wait_for_element("parking", timeout=4)
+    assert "/spaces" in dash_duo.driver.current_url
+    
+def test_nav_link_energy(dash_duo):
+    """
+    Check the nav link works and leads to the charts page.
+    """
+    app = import_app(app_file="app_dash")
+    dash_duo.start_server(app)
+    # Delay just so I can visually check the page is loaded, this isn't necessary!
+    time.sleep(2)
+
+    # Wait for the navlink to be visible
+    """dash_duo.wait_for_element("parking", timeout=4)
+
+    # Click on the navlink
+    dash_duo.driver.find_element(By.ID, "parking").click()"""
+    
+    navlink = WebDriverWait(dash_duo.driver, 10).until(
+        EC.visibility_of_element_located((By.ID, "energy"))
+    )
+
+    # Click on the navlink
+    navlink.click()
+
+    # Delay just so I can visually check the page is loaded, this isn't necessary!
+    time.sleep(2)
+    
+    dash_duo.wait_for_element("h1", timeout=4)
+
+    # Find the text content of the H1 heading element
+    h1_text = dash_duo.find_element("h1").text
+
+    # Check the page url includes "charts"
+    #dash_duo.wait_for_element("parking", timeout=4)
+    assert "/energy" in dash_duo.driver.current_url
+    assert h1_text == "Renewable Energy Page"

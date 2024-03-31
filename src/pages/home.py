@@ -11,7 +11,7 @@ from pages import energypage,parking_spaces
 # Variable that contain
 navbar = dbc.NavbarSimple(
     children=[
-        dbc.NavItem(dbc.NavLink("Click here for information about Parking Spaces", href = '/spaces'))],#href=dash.page_registry['pages.parking_spaces']['path'])),
+        dbc.NavItem(dbc.NavLink("Click here for information about Parking Spaces", href = '/spaces',id='parking'))],#href=dash.page_registry['pages.parking_spaces']['path'])),
     
     #brand="Paralympics Dashboard",
     #brand_href="#",#brand="Navigation 1",
@@ -24,7 +24,7 @@ navbar = dbc.NavbarSimple(
 )
 
 navbar1 = dbc.NavbarSimple(
-    children=[dbc.NavItem(dbc.NavLink("Click here for information about Renewable Energy",href= '/energy'))],#href=dash.page_registry['pages.energypage']['path']))],
+    children=[dbc.NavItem(dbc.NavLink("Click here for information about Renewable Energy",href= '/energy',id='energy'))],#href=dash.page_registry['pages.energypage']['path']))],
     #brand_href="#",#brand="Navigation 1",
                 color="dark",
                 dark=True,

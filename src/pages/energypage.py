@@ -99,8 +99,19 @@ row_eight = html.Div(
             #html.Img(src=app.get_asset_url('line-chart-placeholder.png'), className="img-fluid"),
         ], width=12)]))
 
+row_21 = html.Div(
+    dbc.Row([dbc.Col(html.H1("Renewable Energy Page"), width=12),]),#className="mb-4",
+    ) 
+
+row_22 = html.Div(
+    dbc.Row([dbc.Col(html.P("Welcome to the Renewable Energy page!"), width=12)])
+    ) 
+
 layout = dbc.Container([
     row_ten,
+    row_21,
+    row_ten,
+    row_22,
     row_seven,
     row_ten,
     row_eight,
