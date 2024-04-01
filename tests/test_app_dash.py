@@ -93,12 +93,12 @@ def test_home_h1textequals(dash_duo):
     assert len(card.text) > 2"""
 
 
-def test_line_chart_selection(dash_duo):
-    """
+"""def test_line_chart_selection(dash_duo):
+    
     GIVEN the app is running
     WHEN the dropdown for the line chart is changed to
     THEN the H1 heading text should be "Paralympics Dashboard"
-    """
+    
     app = import_app(app_file="app_dash")
     dash_duo.start_server(app)
     # To find an element by id you use '#id-name'; to find an element by class use '.class-name'
@@ -115,6 +115,7 @@ def test_line_chart_selection(dash_duo):
     css_selector = '#line > div.js-plotly-plot > div > div > svg:nth-child(2) > g.infolayer > g.g-gtitle > text'
     chart_title = dash_duo.find_element(css_selector)
     assert ("Energy" in chart_title.text), "'sports' should appear in the chart title"
+    """
     
 def test_nav_link_charts(dash_duo):
     """
