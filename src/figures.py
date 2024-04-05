@@ -48,16 +48,20 @@ year_datasets = {
 
 
 def bar_chart(num_charts,selected_year):
+    
     """
-    Creates a stacked bar chart showing change in the number of sports in the summer and winter paralympics
-    over time
-    An example for exercise 2.
+    Generate a bar chart comparing car parking spaces and cycle spaces for different Higher Education Providers.
 
-    :param event_type: str Winter or Summer
-    :return: Plotly Express bar chart
+    Args:
+        num_charts (list): A list containing two integers representing the range of data to be plotted.
+        selected_year (str): The selected year for which data will be plotted.
+
+    Returns:
+        plotly.graph_objs._figure.Figure: The generated bar chart figure.
+    
+    
     """
-    #cols = ['HE provider', 'cycle_spaces', 'car_spaces']
-    #df_events = pd.read_csv(data6, usecols=cols)
+    
     if isinstance(selected_year, list):
         selected_year = selected_year[0]
     
@@ -85,17 +89,25 @@ def bar_chart(num_charts,selected_year):
 
 def pie_chart(selected_provider,selected_year):
     
-    #filtered_data = year_datasets[selected_year[0]]
+    """
+    Generate a pie chart showing the distribution of cycle spaces and car parking spaces for a selected provider and year.
+
+    Args:
+        selected_provider (str): The name of the provider for which the pie chart is generated.
+        selected_year (str): The selected year for which data will be plotted.
+
+    Returns:
+        plotly.graph_objs._figure.Figure: The generated pie chart figure
+    
+    """
+
     if isinstance(selected_year, list):
         selected_year = selected_year[0]
     filtered_data = year_datasets[selected_year]
-    #print(filtered_data)
     if selected_provider:
         filtered_data = filtered_data[filtered_data['HE provider'] == selected_provider]
     cycle_spaces = filtered_data['Total number of cycle spaces'].values[0]
     car_spaces = filtered_data['Total number of car parking spaces'].values[0]
-    #values = filtered_data[['cycle_spaces', 'car_spaces', 'energy']]
-    print(cycle_spaces, car_spaces)
     labels = ['Cycle Spaces', 'Car Spaces']
     colors = ['gold', 'lightgreen']
     values = [cycle_spaces,car_spaces]
@@ -107,25 +119,19 @@ def pie_chart(selected_provider,selected_year):
         borderwidth=1)                                            )
     figure.update_traces(textinfo='percent+label', textfont_size=20,
                   marker=dict(colors=colors, line=dict(color='#000000', width=2)))
-    #figure.show()
-    """figure = px.pie(df, values=values, names=labels, title=f'Pie Chart for {selected_provider}').update_layout(height= 800)
-    figure.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=20,
-                  marker=dict(colors=colors, line=dict(color='#000000', width=0.01)))"""
     return figure
-
-def table_stats(selected_provider):
-    filtered_data = year_datasets[selected_provider]
     
 def line_chart(selected_providers):
-    """filtered_data = all_data[all_data['HE provider'] == selected_provider]
-    print(filtered_data['HE provider'])
-    # Create line chart
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(x=filtered_data['Year'], y=filtered_data['Total renewable energy generated onsite or offsite (kWh)'], mode='lines', name='Energy'))
-    fig.update_layout(title=f'Energy Over Years for {selected_provider}',
-                      xaxis_title='Year',
-                      yaxis_title='Energy')
-    return fig"""
+    
+    """
+    Generate a line chart showing the energy generated over the years for the selected providers.
+
+    Args:
+        selected_providers (list): A list of provider names for which the line chart is generated.
+
+    Returns:
+        plotly.graph_objs._figure.Figure: The generated line chart figure.
+    """
     
     filtered_data = all_data[all_data['HE provider'].isin(selected_providers)]
     
@@ -136,46 +142,30 @@ def line_chart(selected_providers):
         fig.add_trace(go.Scatter(x=provider_data['Year'], y=provider_data['Total renewable energy generated onsite or offsite (kWh)'], mode='lines+markers', name=provider,
                                  line=dict(width=1,shape='spline',smoothing=1.3),
                                  marker=dict(size=10)))
-    fig.update_layout(title='Energy Over Years for Selected Providers',
+    fig.update_layout(title='Energy Over Years for Selected HE Providers',
                       xaxis_title='Year',
                       yaxis_title='Energy',
                       legend=dict(font=dict(size=13),orientation='h', xanchor='center', x=0.5, y=-0.2),height= 700,margin=dict(r=4,l=40),paper_bgcolor= '#FFFFFF')#'#3498db')
     return fig
 
-"""def heatmap(selected_providers):
-    
-    filtered_data = all_data[all_data['HE provider'].isin(selected_providers)]
-    for provider in selected_providers:
-        provider_data = filtered_data[filtered_data['HE provider'] == provider]
-    heatmap_trace = go.Heatmap(
-    x=provider_data['Year'],
-    y=provider_data['HE provider'],
-    z=provider_data['Total renewable energy generated onsite or offsite (kWh)'],
-    #colorscale='Viridis',  # Change colorscale as needed
-    #colorbar=dict(title='Energy Consumption')
-)
-    return heatmap_trace"""
-colorscale= [[0,'#f7fb77'],[0.2,'#cce6ff'],[0.4,'#99ccff'],[0.6,'#66b3ff'],[0.8,'#3399ff'],[1,'#0066ff']]
 
 def heatmap(selected_providers):
+    
+    """
+    Generate a heatmap showing the energy generated over the years for the selected providers.
 
-    #if not selected_providers:
-     #   return {}
-    #filtered_data = all_data[all_data["HE provider"] == selected_provider]
+    Args:
+        selected_providers (list): A list of provider names for which the heatmap is generated.
+
+    Returns:
+        plotly.graph_objs._figure.Figure: The generated heatmap figure.
+    """
     filtered_data = all_data[all_data['HE provider'].isin(selected_providers)]
     filtered_data  = filtered_data.pivot(index='HE provider',columns='Year',values='Total renewable energy generated onsite or offsite (kWh)') 
-    # Check if data is empty for the selected provider
+
     fig = px.imshow(filtered_data,color_continuous_scale=px.colors.sequential.Oranges)
-    """heatmap_trace = go.Heatmap(
-            x=filtered_data["Year"],
-            #y=filtered_data["HE provider"],  # This value is likely not useful for a single provider
-            y=filtered_data["Total renewable energy generated onsite or offsite (kWh)"],
-            # colorscale='Viridis',  # Optional color scale customization
-            # colorbar=dict(title='Energy Consumption')  # Optional color bar customization
-        )"""
-    fig.update_layout(title='Energy Over Years for Selected Providers',height= 700)#,margin=dict(b=1,r=4,l=40))
+    fig.update_layout(title='Distribution of Renewable Energy over years for different HE providers',height= 700)
     return fig
-    # Return None if no data is found for the selected provider
 
 
 

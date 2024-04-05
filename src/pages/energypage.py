@@ -1,20 +1,17 @@
 
 from dash import Dash, html, dcc,register_page, get_asset_url,callback, Input, Output
 import dash_bootstrap_components as dbc
-from figures import bar_chart,pie_chart,line_chart,heatmap
+from figures import line_chart,heatmap
 from pathlib import Path
 import pandas as pd
-from dash import dash_table
-import dash_ag_grid as dag
-#data = Path(__file__).parent.parent.joinpath("data", "prepared6.csv")
-#df = pd.read_csv(data)
+
+#UPLOADED ALL MY DATASETS AND CONCATENATED THEM
 try:
     
     data = Path(__file__).parent.parent.joinpath("data", "prepared.csv")
     dataset_2016 = pd.read_csv(data)
-    print("File successfully loadedee.")
 except FileNotFoundError:
-    print("Error: File not founde.")
+    print("Error: File not found.")
 except Exception as e:
     print("Error:", e)
 dataset_2016['Year'] = 2016
@@ -50,14 +47,11 @@ year_datasets = {
     '2021/22': dataset_2022
 }
 first_value = dataset_2022.iloc[8]['HE provider']
-#bar = bar_chart([1,9],'2015/16')
-pie = pie_chart(first_value,'2015/16')
 line = line_chart(['The University of Greenwich'])
 heat = heatmap(['The University of Greenwich'])
 column_values = dataset_2022['HE provider'].unique()
 
-# register the page in the app
-#register_page(__name__, name="Charts", title="Charts",path="/e")
+# CREATED DIFFERENT FUNCTIONALITIES FOR THIS PAGE TO ALLOW INTERACTION WITH THE USER
 
 dropdown2 = dcc.Dropdown(
         id='provider-dropdown',
@@ -68,17 +62,13 @@ dropdown2 = dcc.Dropdown(
 
 navbar2 = dbc.NavbarSimple(
     children=[
-        dbc.NavItem(dbc.NavLink("Go to home page", href = '/home'))],#href=dash.page_registry['pages.parking_spaces']['path'])),
-    
-    #brand="Paralympics Dashboard",
-    #brand_href="#",#brand="Navigation 1",
+        dbc.NavItem(dbc.NavLink("Go to home page", href = '/home'))],
                 color="dark",
                 dark=True,
-                #expand="md",
                 style={'position': 'absolute', 'top': 0, 'left': 0, 'right': 0, 'z-index': 1000}
-    #color="primary",
-    #dark=True,
 )
+
+#CREATED DIFFERENT LAYOUTS FOR THE PAGE
 
 row_ten = html.Br()
 
@@ -88,39 +78,39 @@ row_20 = html.Div(
 
 row_seven = html.Div(
     dbc.Row([dbc.Col(children=[dcc.Graph(id='line', figure = line)
-            #html.Img(src=app.get_asset_url('line-chart-placeholder.png'), className="img-fluid"),
         ], width=12)])) 
 row_eleven = html.Div(dbc.Row([dbc.Col(children=[dcc.Graph(id='heat', figure = heat)
-            #html.Img(src=app.get_asset_url('line-chart-placeholder.png'), className="img-fluid"),
         ], width=12)]))
 
 row_eight = html.Div(
     dbc.Row([dbc.Col(children=[dropdown2
-            #html.Img(src=app.get_asset_url('line-chart-placeholder.png'), className="img-fluid"),
         ], width=12)]))
 
 row_21 = html.Div(
-    dbc.Row([dbc.Col(html.H1("Renewable Energy Page"), width=12),]),#className="mb-4",
+    dbc.Row([dbc.Col(html.H1("Renewable Energy Page"), width=12),])
     ) 
 
 row_22 = html.Div(
-    dbc.Row([dbc.Col(html.P("Welcome to the Renewable Energy page!"), width=12)])
+    dbc.Row([dbc.Col(html.P("Welcome to the Renewable Energy page!This Page contains two charts, one is the heat map the other is the line chart.Explore!"), width=12)])
+    )
+row_24 = html.Div(
+    dbc.Row([dbc.Col(html.P("This Page contains two charts, one is the heat map and the other is the line chart. Explore!"), width=12)])
     ) 
 row_23 = html.Div(
-    dbc.Row([dbc.Col(html.Div("Select universities to display the heat map below and line chart above for:", style={'font-weight': 'bold'}))])
+    dbc.Row([dbc.Col(html.Div("Select universities to display the heat map and line chart below:", style={'font-weight': 'bold'}))])
 )
 
-
+#LAYOUT FOR THE APP SO THAT IT IS RESPONSIVE BASED ON THE DEVICE
 layout = dbc.Container([
     row_ten,
     row_ten,
     row_ten,
     row_21,
     row_ten,
-    row_22,
-    row_seven,row_23,
-    row_ten,
+    row_22,row_24,row_ten,row_23,
     row_eight,
+    row_seven,
+    row_ten,
     row_ten,
     row_eleven,
     row_20
@@ -133,5 +123,5 @@ layout = dbc.Container([
 )
 def update_line_chart(selected_provider):
     figure = line_chart(selected_provider)
-    figure1 = heatmap(selected_provider)#,selected_provider)
+    figure1 = heatmap(selected_provider)
     return figure,figure1

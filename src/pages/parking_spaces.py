@@ -5,12 +5,11 @@ from figures import bar_chart,pie_chart,line_chart,heatmap
 from pathlib import Path
 import pandas as pd
 from dash import dash_table
-#data = Path(__file__).parent.parent.joinpath("data", "prepared6.csv")
-#df = pd.read_csv(data)
+
+# I UPLOADED  ALL MY DATASETS AND CONCATENATED THEM.
 try:
     data = Path(__file__).parent.parent.joinpath("data", "prepared.csv")
     dataset_2016 = pd.read_csv(data)
-    print("File successfully loadedee.")
 except FileNotFoundError:
     print("Error: File not found.")
 except Exception as e:
@@ -53,21 +52,15 @@ line = line_chart(['University College London'])
 heat = heatmap(['The University of Greenwich'])
 column_values = dataset_2022['HE provider'].unique()
 
-#register_page(__name__, name="Parking", title="parking", path="/c")
+#CREATED THE NAVIGATION BAR TO USE IT TO RETURN TO THE HOME PAGE
 navbar2 = dbc.NavbarSimple(
     children=[
-        dbc.NavItem(dbc.NavLink("Go to home page", href = '/home'))],#href=dash.page_registry['pages.parking_spaces']['path'])),
-    
-    #brand="Paralympics Dashboard",
-    #brand_href="#",#brand="Navigation 1",
+        dbc.NavItem(dbc.NavLink("Go to home page", href = '/home'))],
                 color="dark",
                 dark=True,
-                #expand="md",
                 style={'position': 'absolute', 'top': 0, 'left': 0, 'right': 0, 'z-index': 1000}
-    #color="primary",
-    #dark=True,
 )
-
+#CREATED RADIOITEMS FOR THE APP TO ALLOW INTERACTION IN THE APP
 checklist = dbc.RadioItems(id = 'checklist',
                           options = [{"label": "2015/16", "value": "2015/16"},
                                     {"label": "2016/17", "value": "2016/17"},
@@ -78,13 +71,12 @@ checklist = dbc.RadioItems(id = 'checklist',
                                     {"label": "2021/22", "value": "2021/22"}],
                           value = ["2015/16"],
                           inline = True,
-                          style={#'background-color': '#2ecc71',
+                          style={
                              'color': 'teal',
                              'border-radius':'5px',
                              'padding':'10px 40px',
                              'border':'none',
                              'cursor':'pointer'}
-                          #type= 'radio'
 )
 
 checklist1 = dbc.RadioItems(id = 'checklist1',
@@ -97,21 +89,19 @@ checklist1 = dbc.RadioItems(id = 'checklist1',
                                     {"label": "2021/22", "value": "2021/22"}],
                           value = ["2020/21"],
                           inline = True,
-                          style={#'background-color': '#2ecc71',
+                          style={
                              'color': 'teal',
                              'border-radius':'5px',
                              'padding':'10px 40px',
                              'border':'none',
                              'cursor':'pointer'}
-                          #type= 'radio'
 )
 
 range_slider = dcc.RangeSlider(
             id="he-provider-slider",
             min=1,
             max=len(all_data['HE provider'].unique()),
-            value=[89, 97],  # Default to show all providers
-            #marks={str(i): i for i in range(min, max + 1)},
+            value=[89, 97],
             tooltip={"placement": "bottom"},
         )
 
@@ -119,16 +109,9 @@ dropdown = dcc.Dropdown(id = 'dropdown',
                       #options = dropdown_options,
                       value='',
                       placeholder='Select University',
-                      #search=True, 
-                      #clearable=True
 )
 
-"""dropdown = dcc.Dropdown(
-        id='dropdown',
-        options=[{'label': provider, 'value': provider} for provider in list(all_data['HE provider'].unique())],
-        #value=[first_value],  # Default selected provider
-        #multi= True
-    )"""
+#CREATED LAYOUT FOR THE APP TO FILL DIFFERENT ROWS 
 
 row_one = html.Div(
     dbc.Row([dbc.Col(html.Div("Adjust the range to select a number of universities to display:", style={'font-weight': 'bold'}))])
@@ -141,35 +124,35 @@ row_eleven = html.Div(
 row_five = html.Div(
     dbc.Row([dbc.Col(children=[
             dcc.Graph(id='bar', figure = bar)
-            #html.Img(src=app.get_asset_url('line-chart-placeholder.png'), className="img-fluid"),
         ], width=12),
              ])
     )
 
 row_two = html.Div(
     dbc.Row([dbc.Col(children=[range_slider
-            #html.Img(src=app.get_asset_url('line-chart-placeholder.png'), className="img-fluid"),
         ], width=12),])
     ) 
 
 row_21 = html.Div(
-    dbc.Row([dbc.Col(html.H1("Parking Spaces Page"), width=12),]),#className="mb-4",
+    dbc.Row([dbc.Col(html.H1("Parking Spaces Page"), width=12),]),
     ) 
 
 row_22 = html.Div(
     dbc.Row([dbc.Col(html.P("Welcome to the parking spaces page!"), width=12)])
     ) 
 
+row_24 = html.Div(
+    dbc.Row([dbc.Col(html.P("This Page contains two charts, one is the bar graph and the other is the pie chart. Explore!"), width=12)])
+    ) 
+
 row_three = html.Div(
     dbc.Row([dbc.Col(children=[dropdown
-            #html.Img(src=app.get_asset_url('line-chart-placeholder.png'), className="img-fluid"),
         ], width=6),
              dbc.Col(children=[
                  checklist,
     ], width =6)]))
 
 row_seven = html.Div(dbc.Row([dbc.Col(children=[checklist1
-            #html.Img(src=app.get_asset_url('line-chart-placeholder.png'), className="img-fluid"),
         ], width=12)]))
 
 row_ten = html.Br()
@@ -181,8 +164,7 @@ row_twelve = html.Div(
 row_six = html.Div(
     dbc.Row([dbc.Col(children=[],width=1),dbc.Col(children=[
         dcc.Graph(id='pie', figure = pie)], width=10
-        ),#{"size": 4, "offset": 4}),
-             #dbc.Col(children=[Table], width=5)
+        ),
         dbc.Col(children=[],width=1)])
     )
 
@@ -195,7 +177,7 @@ layout = dbc.Container([
     row_ten,
     row_ten,
     row_21,
-    row_22,
+    row_22,row_24,
     row_eleven,
     row_seven,
     row_ten,
@@ -209,7 +191,7 @@ layout = dbc.Container([
     row_three,
     row_six,
     row_20
-])
+],fluid=True)
 
 @callback(
     Output('dropdown', 'options'),
@@ -217,7 +199,6 @@ layout = dbc.Container([
 )
 def update_provider_dropdown(selected_years):
     providers = set()
-    #for year in selected_years:
     if isinstance(selected_years, list):
         selected_years = selected_years[0]
     providers.update(year_datasets[selected_years]['HE provider'].unique())
@@ -231,9 +212,6 @@ def update_provider_dropdown(selected_years):
 )
 
 def update_pie_chart(provider,num):
-    #years = ['2016','2017','2018','2019','2020','2021']
-    #if num in years:
-    #df = pd.read_csv('your_data.csv')
     
     figure = pie_chart(provider,num)
     return figure
@@ -241,14 +219,11 @@ def update_pie_chart(provider,num):
 @callback(
     Output(component_id = 'bar',component_property='figure'),
     [Input(component_id = 'he-provider-slider',component_property='value'),
-    #Input(component_id = 'search-input',component_property='value'),
     Input(component_id = 'checklist1',component_property = 'value')],
     allow_duplicates=True
     
 )
 
 def update_bar_chart(selected_value,selected_year):
-    #df = pd.read_csv('your_data.csv')
-    #filtered_df = df[df['HE provider'].str.contains(search_term, case=False)] if search_term else df
     figure = bar_chart(selected_value,selected_year)
     return figure

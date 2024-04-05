@@ -44,7 +44,28 @@ def test_line_dropdown(dash_duo):
     # Assertions
     assert option_text == legend_item.text, f"Expected legend item text: {option_text}, Actual: {legend_item.text}"
     #assert selected_item_text in options, f"Dropdown should contain '{selected_item_text}'"
+    time.sleep(20) 
+    
+    
+def test_click_pie(dash_duo):
+    app = import_app(app_file="app_dash")
+    dash_duo.start_server(app)
+    time.sleep(2)  # Delay just so I can visually check the page is loaded, this isn't necessary!
 
+    navlink = WebDriverWait(dash_duo.driver, 2).until(
+        EC.visibility_of_element_located((By.ID, "parking"))
+    )
+    navlink.click()
+    checkbox = dash_duo.driver.find_element(By.ID,"_dbcprivate_radioitems_checklist_input_2020/21")
+    checkbox.click()
+    css_selector = "#pie > div.js-plotly-plot > div > div > svg:nth-child(1) > g.pielayer > g > g.titletext > text"
+    
+    chart_title = WebDriverWait(dash_duo.driver, 20).until(
+        EC.visibility_of_element_located((By.CSS_SELECTOR, css_selector))
+    )
+    assert ("2020/21" in chart_title.text, "'2021' should appear in the chart title")
+    time.sleep(5)
+    
 def test_slider_interaction(dash_duo):
     # Open the URL of the webpage with the slider
     #driver.get("https://example.com")
@@ -181,7 +202,7 @@ def test_nav_link_energy(dash_duo):
     assert h1_text == "Renewable Energy Page"
 """
 
-def test_piechar_dropdown(dash_duo):
+def test_barchar_radio(dash_duo):
     
     app = import_app(app_file="app_dash")
     dash_duo.start_server(app)
@@ -202,28 +223,12 @@ def test_piechar_dropdown(dash_duo):
     )
     
     #dash_duo.wait_for_element_to_be_clickable("dropdown", timeout=2)
-    
+     
     dropdown_input.click()
     #dash_duo.wait_for_element("#provider",timeout =30)
     #dash_duo.driver.find_element(By.ID,"provider").click()
     assert selected_item_text in dash_duo.find_element("#checklist1").text, f"Dropdown should contain '{selected_item_text}'"
-def test_radio(dash_duo):
-    app = import_app(app_file="app_dash")
-    dash_duo.start_server(app)
-    # Delay just so I can visually check the page is loaded, this isn't necessary!
-    time.sleep(2)
-    
-    navlink = WebDriverWait(dash_duo.driver, 20).until(
-        EC.visibility_of_element_located((By.ID, "parking"))
-    )
-
-    # Click on the navlink
-    navlink.click()  
-    
-    checkbox = dash_duo.driver.find_element(By.ID,"_dbcprivate_radioitems_checklist1_input_2020/21")
-    checkbox.click()
-    dash_duo.driver.implicitly_wait(30)
-    time.sleep(15)
+    time.sleep(5)
     
 def test_url(dash_duo):
 
@@ -250,6 +255,32 @@ def test_url(dash_duo):
     # Assert if the current URL matches the expected URL
     expected_url = "/home"
     assert expected_url in current_url, f"URL mismatch. Expected: {expected_url}, Actual: {current_url}"
+
+def test_radio_barchart(dash_duo):
+    app = import_app(app_file="app_dash")
+    dash_duo.start_server(app)
+    time.sleep(2)
+    
+    navlink = WebDriverWait(dash_duo.driver, 20).until(
+        EC.visibility_of_element_located((By.ID, "parking"))
+    )
+
+    # Click on the navlink
+    navlink.click()  
+    
+    checkbox = dash_duo.driver.find_element(By.ID,"_dbcprivate_radioitems_checklist1_input_2020/21")
+    checkbox.click()
+    x_axis_labels_elements=dash_duo.driver.find_elements(By.CLASS_NAME,"xaxislayer-above")
+    x_axis_label = "The University of Manchester"
+    x_axis_label2 = 'Bath Spa University'#"The University of Reading" 'Bath Spa University'
+
+    x_axis_labels_texts = [label.text for label in x_axis_labels_elements]
+    x_axis_labels = [line for label in x_axis_labels_texts for line in label.split('\n')]
+    assert x_axis_label not in x_axis_labels, f"Label '{x_axis_label}' not found in x-axis labels"
+    assert x_axis_label2 in x_axis_labels #f"Label '{x_axis_label2}' not found in x-axis labels"
+
+    #dash_duo.driver.implicitly_wait(30)
+    time.sleep(15)
 
 def test_line_chart_selection(dash_duo):
     
@@ -311,3 +342,4 @@ def test_nav_link_energy(dash_duo):
     #dash_duo.wait_for_element("parking", timeout=4)
     assert "/energy" in dash_duo.driver.current_url
     assert h1_text == "Renewable Energy Page"
+    

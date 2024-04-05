@@ -45,7 +45,7 @@ from selenium.webdriver.support.ui import Select
     #assert selected_item_text1 in checkboxes.text    
     dash_duo.driver.implicitly_wait(30)
     time.sleep(15)
- """   
+   
 def test_radio(dash_duo):
     app = import_app(app_file="app_dash")
     dash_duo.start_server(app)
@@ -64,7 +64,7 @@ def test_radio(dash_duo):
     dash_duo.driver.implicitly_wait(30)
     time.sleep(15)
     
-"""def test_pie_radio(dash_duo):
+def test_pie_radio(dash_duo):
     app = import_app(app_file="app_dash")
     dash_duo.start_server(app)
     # Delay just so I can visually check the page is loaded, this isn't necessary!
@@ -85,7 +85,7 @@ def test_radio(dash_duo):
     uni.click()
     dash_duo.driver.implicitly_wait(30)
     time.sleep(15)
-  """  
+  
 
 def test_url(dash_duo):
 
@@ -112,31 +112,50 @@ def test_url(dash_duo):
     # Assert if the current URL matches the expected URL
     expected_url = "/home"
     assert expected_url in current_url, f"URL mismatch. Expected: {expected_url}, Actual: {current_url}"
+"""
 
-def test_line_chart_selection(dash_duo):
-    
-    """GIVEN the app is running
-    WHEN the dropdown for the line chart is changed to
-    THEN the H1 heading text should be "Paralympics Dashboard"
-    """
-    
+def test_radio_barchart(dash_duo):
     app = import_app(app_file="app_dash")
     dash_duo.start_server(app)
+    time.sleep(2)
     
-    navlink = WebDriverWait(dash_duo.driver, 10).until(
-        EC.visibility_of_element_located((By.ID, "energy"))
+    navlink = WebDriverWait(dash_duo.driver, 20).until(
+        EC.visibility_of_element_located((By.ID, "parking"))
     )
 
     # Click on the navlink
-    navlink.click()
+    navlink.click()  
+    
+    checkbox = dash_duo.driver.find_element(By.ID,"_dbcprivate_radioitems_checklist1_input_2020/21")
+    checkbox.click()
+    x_axis_labels_elements=dash_duo.driver.find_elements(By.CLASS_NAME,"xaxislayer-above")
+    x_axis_label = "The University of Manchester"
+    x_axis_label2 = "The University of Reading" #'Bath Spa University'
 
-    # Delay just so I can visually check the page is loaded, this isn't necessary!
-    time.sleep(2)
-    dash_duo.driver.implicitly_wait(2)
-    css_selector = "#line > div.js-plotly-plot > div > div > svg:nth-child(3) > g.infolayer > g.g-gtitle > text"
-    #chart_title = dash_duo.find_element(css_selector)
+    x_axis_labels_texts = [label.text for label in x_axis_labels_elements]
+    x_axis_labels = [line for label in x_axis_labels_texts for line in label.split('\n')]
+    assert x_axis_label not in x_axis_labels, f"Label '{x_axis_label}' not found in x-axis labels"
+    assert x_axis_label2 in x_axis_labels #f"Label '{x_axis_label2}' not found in x-axis labels"
+
+    #dash_duo.driver.implicitly_wait(30)
+    time.sleep(15)
+
+def test_click_pie(dash_duo):
+    app = import_app(app_file="app_dash")
+    dash_duo.start_server(app)
+    time.sleep(2)  # Delay just so I can visually check the page is loaded, this isn't necessary!
+
+    navlink = WebDriverWait(dash_duo.driver, 2).until(
+        EC.visibility_of_element_located((By.ID, "parking"))
+    )
+    navlink.click()
+    checkbox = dash_duo.driver.find_element(By.ID,"_dbcprivate_radioitems_checklist_input_2020/21")
+    checkbox.click()
+    css_selector = "#pie > div.js-plotly-plot > div > div > svg:nth-child(1) > g.pielayer > g > g.titletext > text"
+    
     chart_title = WebDriverWait(dash_duo.driver, 20).until(
         EC.visibility_of_element_located((By.CSS_SELECTOR, css_selector))
     )
-    assert ("Energy" in chart_title.text, "'Energy' should appear in the chart title")
+    assert ("2020/21" in chart_title.text, "'2021' should appear in the chart title")
+    time.sleep(5)
     
