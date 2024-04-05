@@ -47,7 +47,7 @@ year_datasets = {
     '2021/22': dataset_2022
 }
 first_value = dataset_2022.iloc[8]['HE provider']
-bar = bar_chart([1,9],'2015/16')
+bar = bar_chart([1,9],'2020/21')
 pie = pie_chart(first_value,'2015/16')
 line = line_chart(['University College London'])
 heat = heatmap(['The University of Greenwich'])
@@ -95,7 +95,7 @@ checklist1 = dbc.RadioItems(id = 'checklist1',
                                     {"label": "2019/20", "value": "2019/20"},
                                     {"label": "2020/21", "value": "2020/21"},
                                     {"label": "2021/22", "value": "2021/22"}],
-                          value = ["2015/16"],
+                          value = ["2020/21"],
                           inline = True,
                           style={#'background-color': '#2ecc71',
                              'color': 'teal',
@@ -122,6 +122,13 @@ dropdown = dcc.Dropdown(id = 'dropdown',
                       #search=True, 
                       #clearable=True
 )
+
+"""dropdown = dcc.Dropdown(
+        id='dropdown',
+        options=[{'label': provider, 'value': provider} for provider in list(all_data['HE provider'].unique())],
+        #value=[first_value],  # Default selected provider
+        #multi= True
+    )"""
 
 row_one = html.Div(
     dbc.Row([dbc.Col(html.Div("Adjust the range to select a number of universities to display:", style={'font-weight': 'bold'}))])
@@ -206,7 +213,7 @@ layout = dbc.Container([
 
 @callback(
     Output('dropdown', 'options'),
-    [Input('checklist', 'value')],allow_duplicates=True
+    [Input('checklist', 'value')],#allow_duplicates=True
 )
 def update_provider_dropdown(selected_years):
     providers = set()

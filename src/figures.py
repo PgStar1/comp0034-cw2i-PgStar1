@@ -32,7 +32,7 @@ data6 = Path(__file__).parent.parent.joinpath("src\data", "prepared6.csv")
 dataset_2022 = pd.read_csv(data6)
 dataset_2022['Year'] = 2022
 
-all_data = pd.concat([dataset_2016,dataset_2017,dataset_2018,dataset_2019,dataset_2020, dataset_2021], ignore_index=True)
+all_data = pd.concat([dataset_2016,dataset_2017,dataset_2018,dataset_2019,dataset_2020, dataset_2021,dataset_2022], ignore_index=True)
 
 
 year_datasets = {

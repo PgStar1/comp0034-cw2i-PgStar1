@@ -37,7 +37,7 @@ data6 = Path(__file__).parent.parent.joinpath("data", "prepared6.csv")
 dataset_2022 = pd.read_csv(data6)
 dataset_2022['Year'] = 2022
 
-all_data = pd.concat([dataset_2016,dataset_2017,dataset_2018,dataset_2019,dataset_2020, dataset_2021], ignore_index=True)
+all_data = pd.concat([dataset_2016,dataset_2017,dataset_2018,dataset_2019,dataset_2020, dataset_2021,dataset_2022], ignore_index=True)
 
 
 year_datasets = {
@@ -50,7 +50,7 @@ year_datasets = {
     '2021/22': dataset_2022
 }
 first_value = dataset_2022.iloc[8]['HE provider']
-bar = bar_chart([1,9],'2015/16')
+#bar = bar_chart([1,9],'2015/16')
 pie = pie_chart(first_value,'2015/16')
 line = line_chart(['The University of Greenwich'])
 heat = heatmap(['The University of Greenwich'])
@@ -106,13 +106,19 @@ row_21 = html.Div(
 row_22 = html.Div(
     dbc.Row([dbc.Col(html.P("Welcome to the Renewable Energy page!"), width=12)])
     ) 
+row_23 = html.Div(
+    dbc.Row([dbc.Col(html.Div("Select universities to display the heat map below and line chart above for:", style={'font-weight': 'bold'}))])
+)
+
 
 layout = dbc.Container([
+    row_ten,
+    row_ten,
     row_ten,
     row_21,
     row_ten,
     row_22,
-    row_seven,
+    row_seven,row_23,
     row_ten,
     row_eight,
     row_ten,
